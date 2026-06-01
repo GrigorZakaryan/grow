@@ -2,7 +2,6 @@ import db from "@/lib/db";
 import { AddReflection } from "./add-reflection";
 import { ReflectionCard } from "./reflection-card";
 import { Domain } from "@/lib/generated/prisma/client";
-import { ChevronLeft } from "lucide-react";
 
 export const Relfections = async ({ domain }: { domain: Domain }) => {
   const reflections = await db.relfection.findMany({

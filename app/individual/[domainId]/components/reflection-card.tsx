@@ -23,9 +23,34 @@ import "@/components/tiptap-node/paragraph-node/paragraph-node.scss";
 import { handleImageUpload, MAX_FILE_SIZE } from "@/lib/tiptap-utils";
 import { Separator } from "@/components/ui/separator";
 import { format } from "date-fns";
-import { Clock, MoreHorizontal } from "lucide-react";
+import { Clock, MoreHorizontal, Trash } from "lucide-react";
+import { useEditorStore } from "../stores/use-editor";
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 export const ReflectionCard = ({ r }: { r: Relfection }) => {
+  const { setContent, setOpen, setDocId } = useEditorStore();
+  const router = useRouter();
+
+  const onDelete = async () => {
+    try {
+      await axios.delete(`/individual/${r.domainId}/api/reflections/${r.id}`);
+      router.refresh();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const editor = useEditor({
     immediatelyRender: false,
     editorProps: {
@@ -65,8 +90,16 @@ export const ReflectionCard = ({ r }: { r: Relfection }) => {
     ],
     content: JSON.parse(JSON.stringify(r.content)),
   });
+
   return (
-    <div className="w-full rounded-2xl bg-[#1e1e1e] text-white p-4 border border-white/5">
+    <div
+      onClick={() => {
+        setDocId(r.id);
+        setContent(JSON.parse(JSON.stringify(r.content)));
+        setOpen();
+      }}
+      className="w-full rounded-2xl bg-[#1e1e1e] text-white p-4 border border-white/5"
+    >
       <div className="w-full">
         <div className="flex flex-col items-center gap-2 w-full">
           <div className="flex flex-col w-full max-w-xs max-h-45 overflow-y-hidden relative ">
@@ -81,7 +114,22 @@ export const ReflectionCard = ({ r }: { r: Relfection }) => {
                 {format(r.updatedAt, "eeee, dd MMM")}
               </p>
             </div>
-            <MoreHorizontal className="w-4 h-4 text-white/60" />
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <MoreHorizontal className="w-4 h-4 text-white/60 relative z-20" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-40">
+                <DropdownMenuItem
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onDelete();
+                  }}
+                  variant="destructive"
+                >
+                  <Trash /> Delete
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
       </div>

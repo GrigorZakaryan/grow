@@ -1,8 +1,8 @@
 import { create } from "zustand";
 
 type EditorProps = {
-  document: string;
-  setLabel: (text: string) => void;
+  content: JSON | null;
+  setContent: (ct: JSON) => void;
   open: boolean;
   state: "saved" | "saving";
   docId: string;
@@ -14,12 +14,12 @@ type EditorProps = {
 
 export const useEditorStore = create<EditorProps>((set) => ({
   open: false,
-  document: "",
+  content: null,
   state: "saved",
   docId: "",
   setDocId: (id: string) => set(() => ({ docId: id })),
   setState: (s) => set(() => ({ state: s })),
-  setClose: () => set(() => ({ open: false })),
+  setClose: () => set(() => ({ open: false, content: null })),
   setOpen: () => set(() => ({ open: true })),
-  setLabel: (text) => set(() => ({ document: text })),
+  setContent: (ct) => set(() => ({ content: ct })),
 }));

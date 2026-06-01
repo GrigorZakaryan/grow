@@ -78,7 +78,7 @@ import { handleImageUpload, MAX_FILE_SIZE } from "@/lib/tiptap-utils";
 // --- Styles ---
 import "@/components/tiptap-templates/simple/simple-editor.scss";
 
-import content from "@/components/tiptap-templates/simple/data/content.json";
+import defaultContent from "@/components/tiptap-templates/simple/data/content.json";
 import { useEditorStore } from "@/app/individual/[domainId]/stores/use-editor";
 import axios from "axios";
 
@@ -189,7 +189,7 @@ const MobileToolbarContent = ({
 );
 
 export function SimpleEditor({ domainId }: { domainId: string }) {
-  const { setState, docId } = useEditorStore();
+  const { setState, docId, content } = useEditorStore();
   const isMobile = useIsBreakpoint();
   const { height } = useWindowSize();
   const [mobileView, setMobileView] = useState<"main" | "highlighter" | "link">(
@@ -268,7 +268,7 @@ export function SimpleEditor({ domainId }: { domainId: string }) {
         onError: (error) => console.error("Upload failed:", error),
       }),
     ],
-    content,
+    content: content ? content : defaultContent,
     onUpdate: () => {
       const cnt: JSONContent | undefined = editor?.getJSON();
       setInput(cnt);

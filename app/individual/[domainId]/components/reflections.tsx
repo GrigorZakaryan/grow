@@ -1,17 +1,29 @@
-"use client";
-import { Plus } from "lucide-react";
-import { useEditor } from "../stores/use-editor";
-import { ReflectionsForm } from "./reflections-form";
-import { AnimatePresence } from "motion/react";
+import db from "@/lib/db";
+import { AddReflection } from "./add-reflection";
+import { ReflectionCard } from "./reflection-card";
+import { Domain } from "@/lib/generated/prisma/client";
+import { ChevronLeft } from "lucide-react";
 
-export const Relfections = () => {
-  const { open, setOpen, setClose } = useEditor();
+export const Relfections = async ({ domain }: { domain: Domain }) => {
+  const reflections = await db.relfection.findMany({
+    where: { domainId: domain.id },
+    orderBy: { createdAt: "desc" },
+  });
+
   return (
-    <div className="min-w-full h-full snap-center px-5 mt-5 shrink-0">
-      <div onClick={() => setOpen()}>
-        <Plus className="text-white" />
+    <div
+      id="journal"
+      className="min-w-full h-full snap-center px-5 shrink-0 overflow-y-auto pb-24"
+    >
+      <div>
+        <h2 className="text-white font-semibold text-2xl py-3">Journal</h2>
+        <div className="flex flex-col items-center gap-5 mt-3">
+          {reflections.map((r) => (
+            <ReflectionCard key={r.id} r={r} />
+          ))}
+        </div>
       </div>
-      <p className="text-white">{open}</p>
+      <AddReflection domainId={domain.id} />
     </div>
   );
 };

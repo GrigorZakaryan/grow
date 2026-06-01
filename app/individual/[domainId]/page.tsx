@@ -1,9 +1,10 @@
-import { Editor } from "@/components/DynamicEditor";
 import db from "@/lib/db";
 import { Plus } from "lucide-react";
 import { Relfections } from "./components/reflections";
 import { AnimatePresence } from "motion/react";
 import { ReflectionsForm } from "./components/reflections-form";
+import { redirect } from "next/navigation";
+import { DomainHeader } from "./components/header";
 
 export default async function DomainPage({
   params,
@@ -12,12 +13,13 @@ export default async function DomainPage({
 }) {
   const { domainId } = await params;
   const domain = await db.domain.findUnique({ where: { id: domainId } });
+  if (!domain?.id) {
+    redirect("/domains");
+  }
   return (
-    <div className="w-full h-full overflow-hidden">
-      <header className="w-full flex items-center justify-center p-3">
-        <h1 className="text-lg text-white">{domain?.label}</h1>
-      </header>
-      <div className="flex w-full h-full overflow-x-auto snap-x snap-mandatory touch-pan-x scrollbar-hide scroll-smooth">
+    <div className="w-full h-dvh overflow-hidden relative">
+      <DomainHeader domainId={domain.id} />
+      <div className="flex w-full h-full overflow-x-auto overflow-y-hidden snap-x snap-mandatory touch-pan-x scrollbar-hide scroll-smooth">
         <div className="min-w-full snap-center px-5 mt-5 shrink-0">
           <div className="w-full h-40 rounded-4xl bg-[#1e1e1e]"></div>
         </div>
@@ -30,10 +32,10 @@ export default async function DomainPage({
             </div>
           </div>
         </div>
-        <Relfections />
+        <Relfections domain={domain} />
       </div>
       <AnimatePresence>
-        <ReflectionsForm />
+        <ReflectionsForm domainId={domain.id} />
       </AnimatePresence>
     </div>
   );

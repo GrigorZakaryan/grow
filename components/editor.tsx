@@ -116,7 +116,7 @@ export default function DocumentEditor() {
     <div className="min-w-full min-h-full">
       <BlockNoteView
         editor={editor}
-        theme={transparentTheme}
+        theme={transparentLightTheme}
         onChange={() => {
           // Pass the editor instance to your debounced save function
           debouncedSave(editor);

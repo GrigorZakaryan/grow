@@ -1,7 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { EditorContent, EditorContext, useEditor } from "@tiptap/react";
+import {
+  EditorContent,
+  EditorContext,
+  JSONContent,
+  useEditor,
+} from "@tiptap/react";
 
 // --- Tiptap Core Extensions ---
 import { StarterKit } from "@tiptap/starter-kit";
@@ -74,6 +79,8 @@ import { handleImageUpload, MAX_FILE_SIZE } from "@/lib/tiptap-utils";
 import "@/components/tiptap-templates/simple/simple-editor.scss";
 
 import content from "@/components/tiptap-templates/simple/data/content.json";
+import { useEditorStore } from "@/app/individual/[domainId]/stores/use-editor";
+import axios from "axios";
 
 const MainToolbarContent = ({
   onHighlighterClick,
@@ -181,13 +188,48 @@ const MobileToolbarContent = ({
   </>
 );
 
-export function SimpleEditor() {
+export function SimpleEditor({ domainId }: { domainId: string }) {
+  const { setState, docId } = useEditorStore();
   const isMobile = useIsBreakpoint();
   const { height } = useWindowSize();
   const [mobileView, setMobileView] = useState<"main" | "highlighter" | "link">(
     "main",
   );
   const toolbarRef = useRef<HTMLDivElement>(null);
+
+  const [input, setInput] = useState<JSONContent | undefined>(undefined);
+  const [debouncedInput, setDebouncedInput] = useState<JSONContent | undefined>(
+    undefined,
+  );
+
+  useEffect(() => {
+    setState("saving");
+    const timeout = setTimeout(() => {
+      setDebouncedInput(input);
+    }, 1000);
+
+    return () => clearTimeout(timeout);
+  }, [input]);
+
+  useEffect(() => {
+    if (!debouncedInput) return;
+
+    onSave();
+  }, [debouncedInput]);
+
+  const onSave = async () => {
+    try {
+      setState("saving");
+      await axios.patch(`/individual/${domainId}/api/reflections`, {
+        content: debouncedInput,
+        docId: docId,
+      });
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setState("saved");
+    }
+  };
 
   const editor = useEditor({
     immediatelyRender: false,
@@ -227,12 +269,18 @@ export function SimpleEditor() {
       }),
     ],
     content,
+    onUpdate: () => {
+      const cnt: JSONContent | undefined = editor?.getJSON();
+      setInput(cnt);
+    },
   });
 
   const rect = useCursorVisibility({
     editor,
     overlayHeight: toolbarRef.current?.getBoundingClientRect().height ?? 0,
   });
+
+  useEffect(() => {}, [editor]);
 
   useEffect(() => {
     if (!isMobile && mobileView !== "main") {

@@ -10,7 +10,9 @@ datasource db {
 model Domain {
   id          String       @id @default(uuid())
   label       String
+
   relfections Relfection[]
+  tasks       Task[]
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -20,6 +22,32 @@ model Relfection {
   id       String @id @default(uuid())
   content  Json
   title    String
+  domainId String
+  domain   Domain @relation(fields: [domainId], references: [id])
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+enum TaskType {
+  ONE_TIME
+  REPEATING
+}
+
+enum TaskStatus {
+  UPCOMING
+  IN_PROGRESS
+  DONE
+}
+
+model Task {
+  id          String @id @default(uuid())
+  label       String
+  description String?
+  type        TaskType
+  deadline    DateTime?
+  status      TaskStatus
+
   domainId String
   domain   Domain @relation(fields: [domainId], references: [id])
 

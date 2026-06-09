@@ -9,7 +9,7 @@ import { Subscript } from "@tiptap/extension-subscript";
 import { Superscript } from "@tiptap/extension-superscript";
 import { Selection } from "@tiptap/extensions";
 import { Relfection } from "@/lib/generated/prisma/client";
-import { EditorContent, EditorContext, useEditor } from "@tiptap/react";
+import { EditorContent, useEditor } from "@tiptap/react";
 
 import { ImageUploadNode } from "@/components/tiptap-node/image-upload-node/image-upload-node-extension";
 import { HorizontalRule } from "@/components/tiptap-node/horizontal-rule-node/horizontal-rule-node-extension";
@@ -23,16 +23,13 @@ import "@/components/tiptap-node/paragraph-node/paragraph-node.scss";
 import { handleImageUpload, MAX_FILE_SIZE } from "@/lib/tiptap-utils";
 import { Separator } from "@/components/ui/separator";
 import { format } from "date-fns";
-import { Clock, MoreHorizontal, Trash } from "lucide-react";
-import { useEditorStore } from "../stores/use-editor";
+import { MoreHorizontal, Trash } from "lucide-react";
+import { useEditorStore } from "../../stores/use-editor";
 
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import axios from "axios";

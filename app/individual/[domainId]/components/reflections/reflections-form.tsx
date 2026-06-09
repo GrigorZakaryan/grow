@@ -2,7 +2,7 @@
 import { Inter } from "next/font/google";
 import { Check, ChevronLeft, CloudCheck, RefreshCcw } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import { useEditorStore } from "../stores/use-editor";
+import { useEditorStore } from "../../stores/use-editor";
 import { SimpleEditor } from "@/components/tiptap-templates/simple/simple-editor";
 import { redirect, useRouter } from "next/navigation";
 

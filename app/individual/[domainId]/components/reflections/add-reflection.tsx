@@ -1,6 +1,6 @@
 "use client";
 import { Plus } from "lucide-react";
-import { useEditorStore } from "../stores/use-editor";
+import { useEditorStore } from "../../stores/use-editor";
 import axios from "axios";
 
 export const AddReflection = ({ domainId }: { domainId: string }) => {
@@ -20,7 +20,7 @@ export const AddReflection = ({ domainId }: { domainId: string }) => {
   };
   return (
     <div
-      className="absolute bg-[#303030] border border-white/20 rounded-full p-2 backdrop-blur-lg bottom-7 right-7 z-30"
+      className="absolute bg-[#303030] border border-white/20 rounded-full p-2 backdrop-blur-lg bottom-24 right-7 z-30"
       onClick={() => onPlus()}
     >
       <Plus className="text-white" />

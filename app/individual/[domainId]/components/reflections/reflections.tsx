@@ -1,6 +1,6 @@
 import db from "@/lib/db";
-import { AddReflection } from "./add-reflection";
-import { ReflectionCard } from "./reflection-card";
+import { AddReflection } from "../reflections/add-reflection";
+import { ReflectionCard } from "../reflections/reflection-card";
 import { Domain } from "@/lib/generated/prisma/client";
 
 export const Relfections = async ({ domain }: { domain: Domain }) => {
@@ -12,7 +12,7 @@ export const Relfections = async ({ domain }: { domain: Domain }) => {
   return (
     <div
       id="journal"
-      className="min-w-full h-full snap-center px-5 shrink-0 overflow-y-auto pb-24"
+      className="min-w-full h-full snap-center px-5 shrink-0 overflow-y-auto pb-24 relative"
     >
       <div>
         <h2 className="text-white font-semibold text-2xl py-3">Journal</h2>

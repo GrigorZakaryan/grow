@@ -16,7 +16,9 @@ export default async function Domains() {
             className="relative w-full rounded-2xl bg-[#1e1e1e] h-40 px-4 py-3 active:bg-white/20 hover:scale-105 active:scale-105 duration-400"
           >
             <div className="relative w-full flex items-center justify-between">
-              <h1 className="text-white text-lg">{domain.label}</h1>
+              <h1 className="flex max-w-[80%] text-white text-lg overflow-x-hidden">
+                {domain.label}
+              </h1>
               <div className="border border-white/10 rounded-full bg-white/10 p-0.5">
                 <ChevronRight className="w-3 h-3 text-white" />
               </div>

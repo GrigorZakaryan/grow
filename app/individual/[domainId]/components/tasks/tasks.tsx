@@ -5,7 +5,7 @@ import { format } from "date-fns";
 import { CalendarDays, RefreshCcw } from "lucide-react";
 
 export const Tasks = async ({ domain }: { domain: Domain }) => {
-  const tasks = await db.task.findMany();
+  const tasks = await db.task.findMany({ where: { domainId: domain.id } });
 
   return (
     <div

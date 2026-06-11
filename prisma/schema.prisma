@@ -40,13 +40,30 @@ enum TaskStatus {
   DONE
 }
 
+enum TaskCountType {
+  TIME
+  QTY
+  CHECKBOX
+}
+
+enum TaskFrequency {
+  DAILY
+  WEEKLY
+  MONTHLY
+}
+
 model Task {
-  id          String @id @default(uuid())
-  label       String
-  description String?
-  type        TaskType
-  deadline    DateTime?
-  status      TaskStatus
+  id            String @id @default(uuid())
+  label         String
+  description   String?
+  type          TaskType
+  deadline      DateTime?
+  frequency     TaskFrequency?
+  status        TaskStatus
+
+  countType     TaskCountType @default(QTY)
+  currentScore  Int?  @default(0)
+  finalScore    Int?
 
   domainId String
   domain   Domain @relation(fields: [domainId], references: [id])

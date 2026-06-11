@@ -2,9 +2,11 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="relative w-full h-dvh">
+    <div className="flex flex-col justify-end w-full h-dvh p-7">
       <Link className="text-white" href={"/home"}>
-        Continue
+        <button className="w-full py-2 bg-white text-black rounded-full text-center">
+          Get started
+        </button>
       </Link>
     </div>
   );

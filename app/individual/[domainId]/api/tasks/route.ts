@@ -7,21 +7,31 @@ export const POST = async (
 ) => {
   const body = await req.json();
   const { domainId } = await params;
-  const { label, type } = body;
-  let { deadline } = body;
+  const { label, type, countType, finalScore } = body;
+  let { deadline, frequency } = body;
 
   if (!label) return new NextResponse("Missing Label!", { status: 400 });
 
   if (type === "ONE_TIME" && !deadline)
     return new NextResponse("Missing deadline!", { status: 400 });
 
-  if (type === "REPEATING") deadline = undefined;
+  if (countType !== "CHECKBOX" && !finalScore)
+    return new NextResponse("Final Score is missing!", { status: 400 });
+
+  if (type === "REPEATING") {
+    deadline = undefined;
+  } else if (type === "ONE_TIME") {
+    frequency = undefined;
+  }
 
   try {
     await db.task.create({
       data: {
         label,
         deadline,
+        frequency,
+        countType,
+        finalScore,
         type,
         status: "UPCOMING",
         domainId,

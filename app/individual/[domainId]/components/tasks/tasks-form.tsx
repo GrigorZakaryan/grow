@@ -188,14 +188,14 @@ export const TasksForm = ({ domainId }: { domainId: string }) => {
                     <select
                       onChange={(e) => {
                         setCountType(
-                          e.target.value as "TIME" | "QTA" | "CHECKBOX",
+                          e.target.value as "TIME" | "QTY" | "CHECKBOX",
                         );
                       }}
                       value={countType}
                       className="text-right focus:outline-none"
                       name="count-type"
                     >
-                      <option className="text-right" value="QTA">
+                      <option className="text-right" value="QTY">
                         Quantity
                       </option>
                       <option className="text-right" value="TIME">
@@ -207,7 +207,7 @@ export const TasksForm = ({ domainId }: { domainId: string }) => {
                     </select>
                   </div>
                   {countType !== "CHECKBOX" && <Separator className="my-4" />}
-                  {countType === "QTA" && (
+                  {countType === "QTY" && (
                     <div className="flex items-center gap-3">
                       <label
                         className="text-white/50 font-normal"

@@ -6,7 +6,7 @@ type TaskFormProps = {
   status: "UPCOMING" | "IN_PROGRESS" | "DONE" | undefined;
   deadline: Date | undefined;
   frequency: "DAILY" | "WEEKLY" | "MONTHLY";
-  countType: "QTA" | "TIME" | "CHECKBOX";
+  countType: "QTY" | "TIME" | "CHECKBOX";
   currentScore: number | undefined;
   finalScore: number | undefined;
   open: boolean;
@@ -16,7 +16,7 @@ type TaskFormProps = {
   setType: (type: "ONE_TIME" | "REPEATING") => void;
   setFrequency: (freq: "DAILY" | "WEEKLY" | "MONTHLY") => void;
 
-  setCountType: (type: "QTA" | "TIME" | "CHECKBOX") => void;
+  setCountType: (type: "QTY" | "TIME" | "CHECKBOX") => void;
   setFinalScore: (num: number) => void;
   setCurrentScore: (num: number) => void;
 
@@ -31,7 +31,7 @@ export const useTaskForm = create<TaskFormProps>((set) => ({
   description: null,
   deadline: undefined,
   frequency: "DAILY",
-  countType: "QTA",
+  countType: "QTY",
   currentScore: 0,
   finalScore: undefined,
   label: "",
@@ -44,7 +44,7 @@ export const useTaskForm = create<TaskFormProps>((set) => ({
   setType: (type: "ONE_TIME" | "REPEATING") => set(() => ({ type })),
   setFrequency: (freq) => set(() => ({ frequency: freq })),
 
-  setCountType: (type: "QTA" | "TIME" | "CHECKBOX") =>
+  setCountType: (type: "QTY" | "TIME" | "CHECKBOX") =>
     set(() => ({ countType: type })),
   setCurrentScore: (num) => set(() => ({ currentScore: num })),
   setFinalScore: (num) => set(() => ({ finalScore: num })),

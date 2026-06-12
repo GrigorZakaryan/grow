@@ -9,11 +9,11 @@ export const Tasks = async ({ domain }: { domain: Domain }) => {
   return (
     <div
       id="tasks"
-      className="min-w-full h-full snap-center px-5 shrink-0 overflow-y-auto pb-24 relative"
+      className="min-w-full h-full snap-center px-5 shrink-0 relative"
     >
-      <div>
+      <div className="h-full">
         <h2 className="text-white font-semibold text-2xl py-3">Tasks</h2>
-        <div className="flex flex-col items-center gap-5 mt-3">
+        <div className="flex-1 flex flex-col items-center gap-5 mt-3 h-full pb-32 overflow-y-scroll">
           {tasks.map((task) => (
             <TaskCard task={task} key={task.id} />
           ))}

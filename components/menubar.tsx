@@ -1,5 +1,5 @@
 "use client";
-import { IoHome } from "react-icons/io5";
+import { FaHouse } from "react-icons/fa6";
 import { IoCalendarClear } from "react-icons/io5";
 import { IoLayers } from "react-icons/io5";
 import { IoMdSettings } from "react-icons/io";
@@ -10,7 +10,7 @@ import { usePathname, useRouter } from "next/navigation";
 
 const list = [
   {
-    icon: <IoHome className="w-6 h-6" />,
+    icon: <FaHouse className="w-6 h-6" />,
     label: "Home",
     key: "home",
     index: 0,

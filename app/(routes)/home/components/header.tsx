@@ -13,12 +13,12 @@ const SFRegular = localFont({
 
 export const Header = () => {
   return (
-    <header className="text-white">
+    <header>
       <div>
         <h1 className={`text-2xl font-semibold ${SFSemibold.className}`}>
           Home
         </h1>
-        <p className={`text-xs text-white/50 ${SFRegular}`}>
+        <p className={`text-xs opacity-50 ${SFRegular}`}>
           {format(new Date(), "EEEE, dd  MMM")}
         </p>
       </div>

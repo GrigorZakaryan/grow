@@ -17,13 +17,13 @@ export const DomainCard = ({ domain }: { domain: DomainProps }) => {
     <Link href={`/individual/${domain.id}`} key={domain.id}>
       <motion.div
         whileTap={{ scale: 1.1 }}
-        className="relative w-full rounded-2xl h-33 px-4 py-3 active:bg-white/20 duration-400"
+        className="relative w-full rounded-2xl h-33 px-4 py-3 dark:active:bg-white/20 duration-400"
       >
         <div className="w-[40%] h-full bg-[#c5305a] absolute left-0 top-0 rounded-2xl"></div>
         <div className="w-full h-[93%] bg-[#c5305a] absolute right-0 bottom-0 rounded-2xl"></div>
         <div className="w-full h-[50%] bg-[#c9184a] absolute bottom-0 left-0 rounded-b-2xl p-2 z-20">
           <div className="flex flex-col items-start">
-            <h1 className="text-md font-semibold">{domain.label}</h1>
+            <h1 className="text-md font-semibold text-white">{domain.label}</h1>
             <p className="text-sm text-white/90">{domain.tasks.length}</p>
           </div>
         </div>

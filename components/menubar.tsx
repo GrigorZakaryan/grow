@@ -10,7 +10,7 @@ import { usePathname, useRouter } from "next/navigation";
 
 const list = [
   {
-    icon: <FaHouse className="w-6 h-6" />,
+    icon: <FaHouse className="w-6 h-6 text-black dark:text-white" />,
     label: "Home",
     key: "home",
     index: 0,
@@ -71,7 +71,7 @@ export const MenuBar = ({ className }: { className?: string }) => {
 
   return (
     <div
-      className={`${className} flex items-center justify-center bg-white/10 border-b border-b-white/20 border-l border-l-white/15 border-t border-r border-t-white/10 border-r-white/10 backdrop-blur-xl shadow-lg w-[90vw] rounded-full p-1`}
+      className={`${className} flex items-center justify-center bg-black/5 dark:bg-white/10 border-b border-b-black/10 dark:border-b-white/20 border-l border-l-black/10 dark:border-l-white/10 border-t border-r border-t-black/10 dark:border-t-white/10 border-r-black/10 dark:border-r-white/10 backdrop-blur-xl shadow-lg w-[90vw] rounded-full p-1`}
     >
       <div
         ref={containerRef}
@@ -111,7 +111,7 @@ export const MenuBar = ({ className }: { className?: string }) => {
             backgroundColor: "rgba(255, 255, 255, 0.25)",
           }}
           // Uses inset positioning layout to match grid row heights perfectly
-          className="absolute top-0 bottom-0 left-0 w-1/4 bg-white/20 rounded-full cursor-grab active:cursor-grabbing origin-center"
+          className="absolute top-0 bottom-0 left-0 w-1/4 bg-black/20 dark:bg-white/20 rounded-full cursor-grab active:cursor-grabbing origin-center"
         />
       </div>
     </div>

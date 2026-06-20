@@ -28,17 +28,17 @@ export default function RootLayout({
       className={cn(
         "h-full",
         "antialiased",
-        "bg-black",
+        "bg-white dark:bg-black",
         SF.className,
         "font-sans",
         geist.variable,
       )}
       suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col w-full h-dvh bg-black">
+      <body className="min-h-full flex flex-col w-full h-dvh bg-white dark:bg-black">
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
+          defaultTheme="dark"
           enableSystem
           disableTransitionOnChange
         >

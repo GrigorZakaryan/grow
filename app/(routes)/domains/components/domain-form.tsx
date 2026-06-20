@@ -34,45 +34,43 @@ export const DomainForm = () => {
             animate={{ y: 0 }}
             transition={{ duration: 0.2 }}
             exit={{ y: "100%" }}
-            className={`${inter.className} absolute ${open ? "bottom-0" : "bottom-[-100vh]"} w-full h-full rounded-t-4xl bg-[#1e1e1e] border-t border-white/20 z-999`}
+            className={`${inter.className} absolute ${open ? "bottom-0" : "bottom-[-100vh]"} w-full h-full rounded-t-4xl bg-white dark:bg-[#1e1e1e] border-t border-black/20 dark:border-white/20 z-999`}
           >
             <div className="flex items-center justify-between p-5">
               <div
-                className="p-3 bg-white/10 rounded-full border border-white/15 active:bg-white/50 transition active:scale-150 duration-200"
+                className="p-3 bg-black/10 dark:bg-white/10 rounded-full border-black/15 dark:border-white/15 active:bg-black/50 dark:active:bg-white/50 transition active:scale-150 duration-200"
                 onClick={() => setClose()}
               >
-                <X className="text-white" />
+                <X />
               </div>
               <div
                 onClick={() => onSubmit()}
-                className="p-3 bg-white/10 rounded-full border border-white/15 active:bg-white/50 transition active:scale-150 duration-200"
+                className="p-3 bg-black/10 dark:bg-white/10 rounded-full border-black/15 dark:border-white/15 active:bg-black/50 dark:active:bg-white/50 transition active:scale-150 duration-200"
               >
-                <Check className="text-white" />
+                <Check />
               </div>
             </div>
 
             <div className="flex justify-center px-5 py-5">
               <div className="flex flex-col items-center w-full">
                 <div className="flex flex-col items-center justify-center gap-3">
-                  <div className="bg-[#313131] rounded-full p-5">
-                    <IoLayers className="w-14 h-14 text-white" />
+                  <div className="bg-black/10 dark:bg-[#313131] rounded-full p-5">
+                    <IoLayers className="w-14 h-14 " />
                   </div>
-                  <h1 className={` text-2xl text-white font-medium`}>
-                    Add Domain
-                  </h1>
-                  <p className="text-white">{open}</p>
+                  <h1 className={` text-2xl  font-medium`}>Add Domain</h1>
+                  <p>{open}</p>
                 </div>
-                <div className="rounded-4xl bg-[#313131] w-full mt-16 p-5">
+                <div className="rounded-4xl bg-black/10 dark:bg-[#313131] w-full mt-16 p-5">
                   <div className="flex items-center gap-3">
                     <label
-                      className="text-white/50 font-normal"
+                      className="opacity-50 font-normal"
                       htmlFor="domain-label"
                     >
                       Label
                     </label>
                     <input
                       onChange={(e) => setLabel(e.target.value)}
-                      className="w-full text-right text-white focus:outline-none"
+                      className="w-full text-right focus:outline-none"
                       id="domain-label"
                       type="text"
                     />

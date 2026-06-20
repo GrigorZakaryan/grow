@@ -1,9 +1,19 @@
 "use client";
+import { RadialProgress } from "@/components/radial-progress";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Progress } from "@/components/ui/progress";
+import { Separator } from "@/components/ui/separator";
 import { Task } from "@/lib/generated/prisma/client";
 import { format } from "date-fns";
-import { CalendarDays, PlayCircle, RefreshCcw } from "lucide-react";
+import {
+  CalendarDays,
+  Flame,
+  Loader,
+  PlayCircle,
+  RefreshCcw,
+  Repeat,
+  StepForward,
+} from "lucide-react";
 import Link from "next/link";
 
 export const TaskCard = ({ task }: { task: Task }) => {
@@ -38,7 +48,7 @@ export const TaskCard = ({ task }: { task: Task }) => {
     if (task.countType === "TIME") {
       return `${formatMStoString(Math.max(0, (task.finalTimeMS ?? 0) - (task.timeMS ?? 0)))} left`;
     } else {
-      return `(${currentScore}/${finalScore})`;
+      return `${currentScore}/${finalScore}`;
     }
   };
 
@@ -53,37 +63,44 @@ export const TaskCard = ({ task }: { task: Task }) => {
   return (
     <div className="w-full rounded-2xl bg-muted dark:bg-[#1e1e1e] p-4 shadow-inner shadow-white/20">
       <div className="flex flex-col items-center justify-between w-full">
-        <div className="flex items-start justify-between w-full">
-          <div className="flex flex-col items-start gap-1 w-full">
-            <h1 className="font-semibold">{task.label}</h1>
-            <p className="text-xs text-black/60 dark:text-white/60 capitalize">
-              {task.type === "ONE_TIME" ? "one-time" : "repeating"}
-            </p>
+        <div className="flex items-center justify-between w-full">
+          <div className="w-full max-w-[60%] overflow-x-hidden">
+            <div className="flex flex-col items-start gap-1 w-full">
+              <h1 className="font-semibold">{task.label}</h1>
+              <p className="text-xs text-black/60 dark:text-white/60 capitalize">
+                {task.type === "ONE_TIME" ? "one-time" : "repeating"}
+              </p>
+            </div>
+            <Separator className="my-3" />
+            <div className="flex items-center gap-2 h-full">
+              <div className="flex items-center gap-2 text-black/60 dark:text-white/60">
+                {task.deadline ? (
+                  <CalendarDays className="w-3 h-3" />
+                ) : (
+                  <Repeat className="w-3 h-3" />
+                )}
+                <p className="text-xs capitalize">
+                  {task.deadline
+                    ? format(new Date(task.deadline), "EE dd MMM HH:mm")
+                    : task.frequency?.toLocaleLowerCase()}
+                </p>
+              </div>
+              <Separator orientation="vertical" />
+              <div className="flex items-center gap-2 text-black/60 dark:text-white/60">
+                <Loader className="w-3 h-3" />
+                <span className="text-xs">{formatProgress()}</span>
+              </div>
+            </div>
+          </div>
+          <div className="max-w-[40%]">
+            <RadialProgress
+              w={80}
+              h={80}
+              strokeWidth={5}
+              percentage={progress}
+            />
           </div>
         </div>
-        {/*<Field className="w-full max-w-sm my-6">
-          <FieldLabel htmlFor="progress-upload">
-            <span className="text-xs text-black/60 dark:text-white/60">
-              Progress {formatProgress()}
-            </span>
-            <span className="text-xs text-black/60 dark:text-white/60 ml-auto">
-              {percentage.toFixed(2)}%
-            </span>
-          </FieldLabel>
-          <Progress value={percentage} id="progress-upload" />
-        </Field> */}
-        {/*<div className="flex items-center gap-2 text-black/60 dark:text-white/60 w-full justify-end">
-          {task.deadline ? (
-            <CalendarDays className="w-3 h-3" />
-          ) : (
-            <RefreshCcw className="w-3 h-3" />
-          )}
-          <p className="text-xs capitalize">
-            {task.deadline
-              ? format(new Date(task.deadline), "EE dd MMM HH:mm")
-              : task.frequency}
-          </p>
-        </div> */}
         {task.status === "UPCOMING" && (
           <Link
             className="w-full"
@@ -91,6 +108,16 @@ export const TaskCard = ({ task }: { task: Task }) => {
           >
             <button className="flex items-center justify-center gap-2 w-full rounded-full dark:bg-white dark:text-black font-semibold text-sm py-3 mt-10">
               <PlayCircle strokeWidth={1.5} className="w-5 h-5" /> Get Started
+            </button>
+          </Link>
+        )}
+        {task.status === "IN_PROGRESS" && (
+          <Link
+            className="w-full"
+            href={`/individual/${task.domainId}/${task.id}`}
+          >
+            <button className="flex items-center justify-center gap-2 w-full rounded-full dark:bg-yellow-600 dark:text-white border border-yellow-200/20 font-semibold text-sm py-3 mt-10">
+              <StepForward strokeWidth={1.5} className="w-5 h-5" /> Resume
             </button>
           </Link>
         )}

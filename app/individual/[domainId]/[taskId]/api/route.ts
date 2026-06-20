@@ -24,21 +24,33 @@ export const PATCH = async (
           status: 400,
         });
       }
-      updateData = { checked: body.checked };
+      updateData = { checked: body.checked, status: "DONE" };
       break;
 
     case "QTY":
       if (typeof body.qty !== "number") {
         return new NextResponse("Invalid or missing quantity", { status: 400 });
       }
-      updateData = { qty: (task.qty ?? 0) + body.qty };
+      updateData = {
+        qty: (task.qty ?? 0) + body.qty,
+        status:
+          (task.qty ?? 0) + body.qty >= (task.finalQty ?? 0)
+            ? "DONE"
+            : "IN_PROGRESS",
+      };
       break;
 
     case "TIME":
       if (typeof body.time !== "number") {
         return new NextResponse("Invalid or missing time", { status: 400 });
       }
-      updateData = { timeMS: (task.timeMS ?? 0) + body.time };
+      updateData = {
+        timeMS: (task.timeMS ?? 0) + body.time,
+        status:
+          (task.timeMS ?? 0) + body.time >= (task.timeMS ?? 0)
+            ? "DONE"
+            : "IN_PROGRESS",
+      };
       break;
 
     default:

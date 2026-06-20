@@ -4,12 +4,50 @@ import { Progress } from "@/components/ui/progress";
 import { Task } from "@/lib/generated/prisma/client";
 import { format } from "date-fns";
 import { CalendarDays, RefreshCcw } from "lucide-react";
+import Link from "next/link";
 
 export const TaskCard = ({ task }: { task: Task }) => {
+  // Use let variables or a helper function to set values
+  let currentScore = 0;
+  let finalScore = 1;
+
+  switch (task.countType) {
+    case "CHECKBOX":
+      currentScore = task.checked ? 1 : 0;
+      finalScore = 1;
+      break;
+    case "QTY":
+      currentScore = task.qty ?? 0;
+      finalScore = task.finalQty ?? 1;
+      break;
+    case "TIME":
+      currentScore = task.timeMS ?? 0;
+      finalScore = task.finalTimeMS ?? 1;
+      break;
+  }
+
+  const formatMStoString = (ms: number) => {
+    // Add parentheses to ensure correct order of operations
+    const minutes = Math.floor((ms ?? 0) / 60000);
+    const seconds = Math.floor(((ms ?? 0) % 60000) / 1000);
+
+    return `${minutes}m ${seconds}s`;
+  };
+
+  const formatProgress = () => {
+    if (task.countType === "TIME") {
+      return `${formatMStoString(Math.max(0, (task.finalTimeMS ?? 0) - (task.timeMS ?? 0)))} left`;
+    } else {
+      return `(${currentScore}/${finalScore})`;
+    }
+  };
+
+  const percentage = finalScore > 0 ? (currentScore / finalScore) * 100 : 0;
+
   return (
-    <div
+    <Link
+      href={`/individual/${task.domainId}/${task.id}`}
       className="w-full rounded-2xl bg-[#1e1e1e] text-white p-4"
-      key={task.id}
     >
       <div className="flex flex-col items-center justify-between w-full">
         <div className="flex flex-col items-start gap-1 w-full">
@@ -21,24 +59,13 @@ export const TaskCard = ({ task }: { task: Task }) => {
         <Field className="w-full max-w-sm my-6">
           <FieldLabel htmlFor="progress-upload">
             <span className="text-xs text-white/60">
-              Progress {`(${task.currentScore}/${task.finalScore})`}
+              Progress {formatProgress()}
             </span>
             <span className="text-xs text-white/60 ml-auto">
-              {(
-                (Number(task.currentScore ? task.currentScore : 0) /
-                  Number(task.finalScore ? task.finalScore : 0)) *
-                100
-              ).toFixed(2)}
-              %
+              {percentage.toFixed(2)}%
             </span>
           </FieldLabel>
-          <Progress
-            value={
-              (Number(task.currentScore ?? 0) / Number(task.finalScore ?? 0)) *
-              100
-            }
-            id="progress-upload"
-          />
+          <Progress value={percentage} id="progress-upload" />
         </Field>
         <div className="flex items-center gap-2 text-white/60 w-full justify-end">
           {task.deadline ? (
@@ -46,13 +73,13 @@ export const TaskCard = ({ task }: { task: Task }) => {
           ) : (
             <RefreshCcw className="w-3 h-3" />
           )}
-          <p className="text-xs capitlize">
+          <p className="text-xs capitalize">
             {task.deadline
               ? format(new Date(task.deadline), "EE dd MMM HH:mm")
               : task.frequency}
           </p>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };

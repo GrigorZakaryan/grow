@@ -27,14 +27,18 @@ export const TasksForm = ({ domainId }: { domainId: string }) => {
 
   const onSubmit = async () => {
     try {
-      await axios.post(`/individual/${domainId}/api/tasks`, {
+      const payload = {
+        label,
         type,
         deadline,
-        label,
         frequency,
         countType,
-        finalScore,
-      });
+        // Map store values to the specific backend fields
+        finalQty: countType === "QTY" ? finalScore : null,
+        finalTimeMS: countType === "TIME" ? finalScore : null,
+      };
+
+      await axios.post(`/individual/${domainId}/api/tasks`, payload);
       reset();
       setClose();
     } catch (err) {

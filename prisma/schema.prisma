@@ -62,9 +62,15 @@ model Task {
   status        TaskStatus
 
   countType     TaskCountType @default(QTY)
-  currentScore  Int?  @default(0)
-  finalScore    Int?
 
+  qty           Int?
+  finalQty      Int?
+
+  timeMS        Int?
+  finalTimeMS   Int?
+
+  checked       Boolean?
+  
   domainId String
   domain   Domain @relation(fields: [domainId], references: [id])
 

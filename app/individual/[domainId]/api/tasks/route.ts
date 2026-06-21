@@ -47,3 +47,41 @@ export const POST = async (
     return new NextResponse("Something went wrong!", { status: 500 });
   }
 };
+
+export const GET = async (
+  req: NextRequest,
+  { params }: { params: Promise<{ domainId: string }> },
+) => {
+  const { searchParams } = new URL(req.url);
+  const localTime = searchParams.get("localTime");
+  const { domainId } = await params;
+
+  if (!localTime || !domainId)
+    return new NextResponse("Missing params", { status: 400 });
+
+  const clientDate = new Date(localTime);
+  clientDate.setUTCHours(0, 0, 0, 0);
+
+  // Perform the bulk update only on REPEATING tasks that are outdated
+  await db.task.updateMany({
+    where: {
+      domainId: domainId,
+      type: "REPEATING", // Only target repeating tasks
+      updatedAt: { lt: clientDate }, // Tasks not updated today
+    },
+    data: {
+      qty: null,
+      timeMS: null,
+      checked: false,
+      status: "UPCOMING",
+    },
+  });
+
+  // Fetch all tasks (now updated) to return to the client
+  const tasks = await db.task.findMany({
+    where: { domainId: domainId },
+    orderBy: { createdAt: "asc" }, // Optional: ensure consistent order
+  });
+
+  return NextResponse.json(tasks, { status: 200 });
+};

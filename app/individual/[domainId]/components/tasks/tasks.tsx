@@ -14,6 +14,7 @@ export const Tasks = ({ domain }: { domain: Domain }) => {
       try {
         // Now you are safely in the browser context
         const localTime = new Date().toISOString();
+        console.log("Local Time client side", localTime);
         const res = await axios.get(
           `/individual/${domain.id}/api/tasks?localTime=${encodeURIComponent(localTime)}`,
         );

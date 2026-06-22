@@ -71,7 +71,7 @@ export const MenuBar = ({ className }: { className?: string }) => {
 
   return (
     <div
-      className={`${className} flex items-center justify-center bg-black/5 dark:bg-white/10 border-b border-b-black/10 dark:border-b-white/20 border-l border-l-black/10 dark:border-l-white/10 border-t border-r border-t-black/10 dark:border-t-white/10 border-r-black/10 dark:border-r-white/10 backdrop-blur-xl shadow-lg w-[90vw] rounded-full p-1`}
+      className={`${className} flex items-center justify-center bg-black/5 dark:bg-gray-300/10 border-b border-b-black/10 dark:border-b-white/20 border-l border-l-black/10 dark:border-l-white/10 border-t border-r border-t-black/10 dark:border-t-white/10 border-r-black/10 dark:border-r-white/10 backdrop-blur-2xl shadow-lg w-[90vw] rounded-full p-1`}
     >
       <div
         ref={containerRef}

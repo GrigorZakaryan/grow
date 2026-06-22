@@ -1,16 +1,12 @@
 "use client";
 import { RadialProgress } from "@/components/radial-progress";
-import { Field, FieldLabel } from "@/components/ui/field";
-import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import { Task } from "@/lib/generated/prisma/client";
 import { format } from "date-fns";
 import {
   CalendarDays,
-  Flame,
   Loader,
   PlayCircle,
-  RefreshCcw,
   Repeat,
   StepForward,
 } from "lucide-react";

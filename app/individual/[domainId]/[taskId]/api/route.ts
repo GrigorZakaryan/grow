@@ -31,6 +31,7 @@ export const PATCH = async (
       if (typeof body.qty !== "number") {
         return new NextResponse("Invalid or missing quantity", { status: 400 });
       }
+
       updateData = {
         qty: (task.qty ?? 0) + body.qty,
         status:
@@ -44,10 +45,11 @@ export const PATCH = async (
       if (typeof body.time !== "number") {
         return new NextResponse("Invalid or missing time", { status: 400 });
       }
+
       updateData = {
         timeMS: (task.timeMS ?? 0) + body.time,
         status:
-          (task.timeMS ?? 0) + body.time >= (task.timeMS ?? 0)
+          (task.timeMS ?? 0) + body.time >= (task.finalTimeMS ?? 0)
             ? "DONE"
             : "IN_PROGRESS",
       };

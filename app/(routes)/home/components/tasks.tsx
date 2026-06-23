@@ -30,8 +30,13 @@ export const HomeTasks = () => {
   }, []);
 
   return (
-    <div className="flex flex-col items-center gap-5 mt-3 w-full h-full overflow-y-auto pb-40">
-      {tasks && tasks.map((task) => <TaskCard task={task} key={task.id} />)}
+    <div className="mt-10">
+      <div>
+        <h2 className="text-xl">Tasks</h2>
+      </div>
+      <div className="flex items-center gap-5 mt-3 w-full overflow-y-hidden overflow-x-auto">
+        {tasks && tasks.map((task) => <TaskCard task={task} key={task.id} />)}
+      </div>
     </div>
   );
 };

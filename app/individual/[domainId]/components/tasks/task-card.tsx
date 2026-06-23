@@ -57,7 +57,7 @@ export const TaskCard = ({ task }: { task: Task }) => {
   const offset = circumference * (1 - progress / 100);
 
   return (
-    <div className="w-full rounded-2xl bg-muted dark:bg-[#1e1e1e] p-4 shadow-inner shadow-white/20">
+    <div className="flex min-w-full rounded-2xl bg-muted dark:bg-gray-300/10 p-4 border border-white/10">
       <div className="flex flex-col items-center justify-between w-full">
         <div className="flex items-center justify-between w-full">
           <div className="w-full max-w-[60%] overflow-x-hidden">

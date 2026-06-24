@@ -1,9 +1,5 @@
 "use client";
-import { FaHouse } from "react-icons/fa6";
-import { IoCalendarClear } from "react-icons/io5";
-import { IoLayers } from "react-icons/io5";
-import { IoMdSettings } from "react-icons/io";
-import { act, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import {
   motion,
@@ -21,7 +17,9 @@ import {
   NotebookPen,
   Plus,
   Settings,
+  Timer,
 } from "lucide-react";
+import { useTimer } from "./modals/stores/use-timer-store";
 
 const list = [
   {
@@ -61,18 +59,26 @@ const activeList = [
     icon: <LayersPlus className="w-6 h-6" />,
     label: "Domain",
     key: "domain",
-    index: 2,
+    index: 1,
   },
   {
     icon: <FilePlus className="w-6 h-6" />,
     label: "Task",
     key: "task",
-    index: 1,
+    index: 2,
+  },
+  {
+    icon: <Timer className="w-6 h-6" />,
+    label: "Timer",
+    key: "timer",
+    index: 3,
   },
 ];
 
 export const MenuBar = ({ className }: { className?: string }) => {
   const [active, setActive] = useState(false);
+
+  const { toggleOpen, open } = useTimer();
 
   const pathname = usePathname();
   const listIndex =
@@ -124,27 +130,13 @@ export const MenuBar = ({ className }: { className?: string }) => {
           {active ? (
             <div className="w-full h-full grid grid-cols-4 grid-rows-3 gap-3">
               {activeList.map((item, index) => (
-                <Link
-                  className="flex flex-col items-center w-full h-full"
-                  key={item.key}
-                  href={`/${item.key}`}
-                  passHref
+                <button
+                  key={index}
+                  onClick={() => toggleOpen()}
+                  className="flex items-center justify-center w-full h-full rounded-2xl z-10 cursor-pointer bg-white/10"
                 >
-                  <button
-                    onClick={() => {
-                      setActiveIndex(index);
-                      if (containerRef.current) {
-                        const colWidth =
-                          containerRef.current.offsetWidth / list.length;
-                        controls.start({ x: index * colWidth });
-                      }
-                    }}
-                    // Removed py-2, added full flex layout centering adjustments
-                    className="flex items-center justify-center w-full h-full rounded-2xl z-10 cursor-pointer bg-white/10"
-                  >
-                    {item.icon}
-                  </button>
-                </Link>
+                  {item.icon}
+                </button>
               ))}
             </div>
           ) : (

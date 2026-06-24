@@ -94,6 +94,7 @@ export const TaskCard = ({ task }: { task: Task }) => {
               h={80}
               strokeWidth={5}
               percentage={progress}
+              showPercentage
             />
           </div>
         </div>

@@ -3,15 +3,21 @@ export const RadialProgress = ({
   h,
   strokeWidth,
   percentage,
+  showPercentage,
 }: {
   w: number;
   h: number;
   strokeWidth: number;
   percentage: number;
+  showPercentage?: boolean;
 }) => {
-  let radius = w / 2 - strokeWidth;
-  const circumference = 2 * Math.PI * radius;
-  const progress = circumference * (1 - percentage / 100);
+  // Guard: ensure w and strokeWidth are valid numbers > 0
+  const radius = w > 0 ? w / 2 - strokeWidth : 0;
+  const circumference = radius > 0 ? 2 * Math.PI * radius : 0;
+
+  // Use a fallback to 0 if percentage is NaN (e.g., during initialization)
+  const safePercentage = isNaN(percentage) ? 0 : percentage;
+  const progress = circumference * (1 - safePercentage / 100);
 
   return (
     <div>
@@ -27,7 +33,7 @@ export const RadialProgress = ({
             cx={w / 2}
             cy={h / 2}
             r={radius}
-            className="fill-none stroke-gray-200 dark:stroke-gray-700"
+            className="fill-none stroke-gray-200 dark:stroke-white/20"
             strokeWidth={strokeWidth}
           />
           <circle
@@ -42,7 +48,7 @@ export const RadialProgress = ({
           />
         </svg>
         <span className="text-sm font-medium text-gray-900 dark:text-white">
-          {percentage.toFixed(0)}%
+          {showPercentage && `${percentage.toFixed(0)}%`}
         </span>
       </div>
     </div>

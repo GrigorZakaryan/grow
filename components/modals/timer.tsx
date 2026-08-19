@@ -5,8 +5,8 @@ import { RadialProgress } from "../radial-progress";
 import { useTimer } from "./stores/use-timer-store";
 import { motion, AnimatePresence } from "motion/react";
 
-export const Timer = ({ time }: { time: number }) => {
-  const { open } = useTimer();
+export const Timer = () => {
+  const { open, time } = useTimer();
 
   const [elapsed, setElapsed] = useState(0);
   const [progress, setProgress] = useState(0);
@@ -68,7 +68,7 @@ export const Timer = ({ time }: { time: number }) => {
           transition={{ type: "spring", stiffness: 300, damping: 30 }}
           className="fixed top-0 left-0 w-full h-50 p-2 z-1000"
         >
-          <div className="w-full h-full bg-black/80 backdrop-blur-lg rounded-4xl border border-white/10 flex items-center justify-center text-white p-2">
+          <div className="w-full h-full bg-black/50 backdrop-blur-lg rounded-4xl border border-white/10 flex items-center justify-center text-white p-2">
             <div className="flex items-center justify-between w-full h-full">
               <div className="flex-1 flex flex-col items-start justify-between w-full h-full p-5">
                 <div>

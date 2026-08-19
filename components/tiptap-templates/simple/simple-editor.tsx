@@ -79,7 +79,7 @@ import { handleImageUpload, MAX_FILE_SIZE } from "@/lib/tiptap-utils";
 import "@/components/tiptap-templates/simple/simple-editor.scss";
 
 import defaultContent from "@/components/tiptap-templates/simple/data/content.json";
-import { useEditorStore } from "@/app/individual/[domainId]/stores/use-editor";
+import { useEditorStore } from "@/app/(routes)/individual/[domainId]/stores/use-editor";
 import axios from "axios";
 
 const MainToolbarContent = ({

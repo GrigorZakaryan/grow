@@ -1,5 +1,5 @@
 "use client";
-import { TaskCard } from "@/app/individual/[domainId]/components/tasks/task-card";
+import { TaskCard } from "@/app/(routes)/individual/[domainId]/components/tasks/task-card";
 import { Task } from "@/lib/generated/prisma/client";
 import axios from "axios";
 import { useEffect, useState } from "react";

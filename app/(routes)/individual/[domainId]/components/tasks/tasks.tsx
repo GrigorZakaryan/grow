@@ -43,7 +43,6 @@ export const Tasks = ({ domain }: { domain: Domain }) => {
           {tasks && tasks.map((task) => <TaskCard task={task} key={task.id} />)}
         </div>
       </div>
-      <AddTask domainId={domain.id} />
     </div>
   );
 };

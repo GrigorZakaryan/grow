@@ -1,10 +1,13 @@
 "use client";
+import { useTimer } from "@/components/modals/stores/use-timer-store";
 import { RadialProgress } from "@/components/radial-progress";
 import { Separator } from "@/components/ui/separator";
 import { Task } from "@/lib/generated/prisma/client";
 import { format } from "date-fns";
 import {
   CalendarDays,
+  CircleCheck,
+  CircleDashed,
   Loader,
   PlayCircle,
   Repeat,
@@ -16,6 +19,7 @@ export const TaskCard = ({ task }: { task: Task }) => {
   // Use let variables or a helper function to set values
   let currentScore = 0;
   let finalScore = 1;
+  const { setTime, toggleOpen } = useTimer();
 
   switch (task.countType) {
     case "CHECKBOX":
@@ -99,14 +103,26 @@ export const TaskCard = ({ task }: { task: Task }) => {
           </div>
         </div>
         {task.status === "UPCOMING" && (
-          <Link
-            className="w-full"
-            href={`/individual/${task.domainId}/${task.id}`}
-          >
-            <button className="flex items-center justify-center gap-2 w-full rounded-full dark:bg-white dark:text-black font-semibold text-sm py-3 mt-10">
-              <PlayCircle strokeWidth={1.5} className="w-5 h-5" /> Get Started
-            </button>
-          </Link>
+          <div className="w-full">
+            {task.countType !== "CHECKBOX" ? (
+              <button
+                onClick={() => {
+                  if (task.countType === "TIME" && task.finalTimeMS) {
+                    setTime(task.finalTimeMS);
+                    toggleOpen();
+                  }
+                }}
+                className="flex items-center justify-center gap-2 w-full rounded-full dark:bg-white dark:text-black font-semibold text-sm py-3 mt-10"
+              >
+                <PlayCircle strokeWidth={1.5} className="w-5 h-5" /> Get Started
+              </button>
+            ) : (
+              <button className="flex items-center justify-center gap-2 w-full rounded-full dark:bg-white dark:text-black font-semibold text-sm py-3 mt-10">
+                <CircleCheck strokeWidth={1.5} className="w-5 h-5" /> Mark
+                Completed
+              </button>
+            )}
+          </div>
         )}
         {task.status === "IN_PROGRESS" && (
           <Link

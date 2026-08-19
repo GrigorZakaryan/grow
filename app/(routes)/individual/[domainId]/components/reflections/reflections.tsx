@@ -22,7 +22,6 @@ export const Relfections = async ({ domain }: { domain: Domain }) => {
           ))}
         </div>
       </div>
-      <AddReflection domainId={domain.id} />
     </div>
   );
 };

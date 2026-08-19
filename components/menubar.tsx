@@ -20,6 +20,7 @@ import {
   Timer,
 } from "lucide-react";
 import { useTimer } from "./modals/stores/use-timer-store";
+import { useDomainForm } from "@/app/(routes)/domains/stores/use-domain-form";
 
 const list = [
   {
@@ -48,37 +49,40 @@ const list = [
   },
 ];
 
-const activeList = [
-  {
-    icon: <NotebookPen className="w-6 h-6 text-black dark:text-white" />,
-    label: "Journal",
-    key: "journal",
-    index: 0,
-  },
-  {
-    icon: <LayersPlus className="w-6 h-6" />,
-    label: "Domain",
-    key: "domain",
-    index: 1,
-  },
-  {
-    icon: <FilePlus className="w-6 h-6" />,
-    label: "Task",
-    key: "task",
-    index: 2,
-  },
-  {
-    icon: <Timer className="w-6 h-6" />,
-    label: "Timer",
-    key: "timer",
-    index: 3,
-  },
-];
-
 export const MenuBar = ({ className }: { className?: string }) => {
   const [active, setActive] = useState(false);
 
   const { toggleOpen, open } = useTimer();
+  const { setOpen } = useDomainForm();
+
+  const activeList = [
+    {
+      icon: <NotebookPen className="w-6 h-6 text-black dark:text-white" />,
+      label: "Journal",
+      key: "journal",
+      index: 0,
+    },
+    {
+      icon: <LayersPlus className="w-6 h-6" />,
+      label: "Domain",
+      key: "domain",
+      index: 1,
+      action: () => setOpen(),
+    },
+    {
+      icon: <FilePlus className="w-6 h-6" />,
+      label: "Task",
+      key: "task",
+      index: 2,
+    },
+    {
+      icon: <Timer className="w-6 h-6" />,
+      label: "Timer",
+      key: "timer",
+      index: 3,
+      action: () => toggleOpen(),
+    },
+  ];
 
   const pathname = usePathname();
   const listIndex =
@@ -132,7 +136,7 @@ export const MenuBar = ({ className }: { className?: string }) => {
               {activeList.map((item, index) => (
                 <button
                   key={index}
-                  onClick={() => toggleOpen()}
+                  onClick={item.action}
                   className="flex items-center justify-center w-full h-full rounded-2xl z-10 cursor-pointer bg-white/10"
                 >
                   {item.icon}

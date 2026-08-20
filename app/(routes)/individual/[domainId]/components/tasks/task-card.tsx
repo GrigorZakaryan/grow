@@ -7,7 +7,6 @@ import { format } from "date-fns";
 import {
   CalendarDays,
   CircleCheck,
-  CircleDashed,
   Loader,
   PlayCircle,
   Repeat,
@@ -19,7 +18,7 @@ export const TaskCard = ({ task }: { task: Task }) => {
   // Use let variables or a helper function to set values
   let currentScore = 0;
   let finalScore = 1;
-  const { setTime, toggleOpen } = useTimer();
+  const { setTime, toggleOpen, setTaskId, setDomainId } = useTimer();
 
   switch (task.countType) {
     case "CHECKBOX":
@@ -99,6 +98,7 @@ export const TaskCard = ({ task }: { task: Task }) => {
               strokeWidth={5}
               percentage={progress}
               showPercentage
+              toggleStop={() => {}}
             />
           </div>
         </div>
@@ -109,6 +109,8 @@ export const TaskCard = ({ task }: { task: Task }) => {
                 onClick={() => {
                   if (task.countType === "TIME" && task.finalTimeMS) {
                     setTime(task.finalTimeMS);
+                    setTaskId(task.id);
+                    setDomainId(task.domainId);
                     toggleOpen();
                   }
                 }}
@@ -125,14 +127,28 @@ export const TaskCard = ({ task }: { task: Task }) => {
           </div>
         )}
         {task.status === "IN_PROGRESS" && (
-          <Link
-            className="w-full"
-            href={`/individual/${task.domainId}/${task.id}`}
-          >
-            <button className="flex items-center justify-center gap-2 w-full rounded-full dark:bg-yellow-600 dark:text-white border border-yellow-200/20 font-semibold text-sm py-3 mt-10">
-              <StepForward strokeWidth={1.5} className="w-5 h-5" /> Resume
-            </button>
-          </Link>
+          <div className="w-full">
+            {task.countType !== "CHECKBOX" ? (
+              <button
+                onClick={() => {
+                  if (task.countType === "TIME" && task.finalTimeMS) {
+                    setTime(task.finalTimeMS - (task.timeMS ?? 0));
+                    setTaskId(task.id);
+                    setDomainId(task.domainId);
+                    toggleOpen();
+                  }
+                }}
+                className="flex items-center justify-center gap-2 w-full rounded-full dark:bg-white dark:text-black font-semibold text-sm py-3 mt-10"
+              >
+                <StepForward strokeWidth={1.5} className="w-5 h-5" /> Resume
+              </button>
+            ) : (
+              <button className="flex items-center justify-center gap-2 w-full rounded-full dark:bg-white dark:text-black font-semibold text-sm py-3 mt-10">
+                <CircleCheck strokeWidth={1.5} className="w-5 h-5" /> Mark
+                Completed
+              </button>
+            )}
+          </div>
         )}
       </div>
     </div>

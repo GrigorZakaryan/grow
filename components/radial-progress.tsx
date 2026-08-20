@@ -1,15 +1,21 @@
+import { Pause, Play } from "lucide-react";
+
 export const RadialProgress = ({
   w,
   h,
   strokeWidth,
   percentage,
   showPercentage,
+  isRunning,
+  toggleStop,
 }: {
   w: number;
   h: number;
   strokeWidth: number;
   percentage: number;
   showPercentage?: boolean;
+  isRunning?: boolean;
+  toggleStop: () => void;
 }) => {
   // Guard: ensure w and strokeWidth are valid numbers > 0
   const radius = w > 0 ? w / 2 - strokeWidth : 0;
@@ -47,9 +53,19 @@ export const RadialProgress = ({
             strokeDashoffset={progress}
           />
         </svg>
-        <span className="text-sm font-medium text-gray-900 dark:text-white">
-          {showPercentage && `${percentage.toFixed(0)}%`}
-        </span>
+        <div>
+          <span className="text-sm font-medium text-gray-900 dark:text-white">
+            {showPercentage && `${percentage.toFixed(0)}%`}
+          </span>
+          <div className="relative z-99" onClick={() => toggleStop()}>
+            {!showPercentage &&
+              (isRunning ? (
+                <Pause className="w-10 h-10 text-white/70" />
+              ) : (
+                <Play className="w-10 h-10 text-white/70" />
+              ))}
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { useTimer } from "./modals/stores/use-timer-store";
 import { useDomainForm } from "@/app/(routes)/domains/stores/use-domain-form";
+import { useTaskForm } from "@/app/(routes)/individual/[domainId]/stores/use-task-form";
 
 const list = [
   {
@@ -54,6 +55,7 @@ export const MenuBar = ({ className }: { className?: string }) => {
 
   const { toggleOpen, open } = useTimer();
   const { setOpen } = useDomainForm();
+  const { setOpenTask } = useTaskForm();
 
   const activeList = [
     {
@@ -74,6 +76,7 @@ export const MenuBar = ({ className }: { className?: string }) => {
       label: "Task",
       key: "task",
       index: 2,
+      action: () => setOpenTask(),
     },
     {
       icon: <Timer className="w-6 h-6" />,

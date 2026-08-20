@@ -9,7 +9,8 @@ type TaskFormProps = {
   countType: "QTY" | "TIME" | "CHECKBOX";
   currentScore: number | undefined;
   finalScore: number | undefined;
-  open: boolean;
+  domainId: string;
+  openTask: boolean;
 
   setLabel: (text: string) => void;
   setDeadline: (date: Date) => void;
@@ -22,12 +23,14 @@ type TaskFormProps = {
 
   setStatus: (status: "UPCOMING" | "IN_PROGRESS" | "DONE") => void;
   setClose: () => void;
-  setOpen: () => void;
+  setDomainId: (id: string) => void;
+  setOpenTask: () => void;
   reset: () => void;
 };
 
 export const useTaskForm = create<TaskFormProps>((set) => ({
-  open: false,
+  openTask: false,
+  domainId: "",
   description: null,
   deadline: undefined,
   frequency: "DAILY",
@@ -37,8 +40,8 @@ export const useTaskForm = create<TaskFormProps>((set) => ({
   label: "",
   status: "UPCOMING",
   type: "REPEATING",
-  setClose: () => set(() => ({ open: false })),
-  setOpen: () => set(() => ({ open: true })),
+  setClose: () => set(() => ({ openTask: false })),
+  setOpenTask: () => set(() => ({ openTask: true })),
   setLabel: (text: string) => set(() => ({ label: text })),
   setDeadline: (date: Date) => set(() => ({ deadline: date })),
   setType: (type: "ONE_TIME" | "REPEATING") => set(() => ({ type })),
@@ -48,6 +51,8 @@ export const useTaskForm = create<TaskFormProps>((set) => ({
     set(() => ({ countType: type })),
   setCurrentScore: (num) => set(() => ({ currentScore: num })),
   setFinalScore: (num) => set(() => ({ finalScore: num })),
+
+  setDomainId: (id: string) => set((e) => ({ domainId: id })),
 
   setStatus: (status: "UPCOMING" | "IN_PROGRESS" | "DONE") =>
     set(() => ({ status })),

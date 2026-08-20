@@ -36,7 +36,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 
 export const ReflectionCard = ({ r }: { r: Relfection }) => {
-  const { setContent, setOpen, setDocId } = useEditorStore();
+  const { setContent, setOpenEditor, setDocId } = useEditorStore();
   const router = useRouter();
 
   const onDelete = async () => {
@@ -93,7 +93,7 @@ export const ReflectionCard = ({ r }: { r: Relfection }) => {
       onClick={() => {
         setDocId(r.id);
         setContent(JSON.parse(JSON.stringify(r.content)));
-        setOpen();
+        setOpenEditor();
       }}
       className="w-full rounded-2xl bg-[#1e1e1e] text-white p-4 border border-white/5"
     >

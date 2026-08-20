@@ -4,7 +4,7 @@ import { useEditorStore } from "../../stores/use-editor";
 import axios from "axios";
 
 export const AddReflection = ({ domainId }: { domainId: string }) => {
-  const { open, setOpen, setDocId } = useEditorStore();
+  const { openEditor, setOpenEditor, setDocId } = useEditorStore();
   const onPlus = async () => {
     try {
       const res = await axios.post(
@@ -12,7 +12,7 @@ export const AddReflection = ({ domainId }: { domainId: string }) => {
         {},
       );
       setDocId(res.data.id);
-      setOpen();
+      setOpenEditor();
     } catch (err) {
       console.error(err);
     } finally {

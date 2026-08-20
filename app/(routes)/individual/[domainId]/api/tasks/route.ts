@@ -36,7 +36,7 @@ export const POST = async (
         qty: countType === "QTY" ? 0 : null,
         finalQty: countType === "QTY" ? finalQty : null,
         timeMS: countType === "TIME" ? 0 : null,
-        finalTimeMS: countType === "TIME" ? finalTimeMS : null,
+        finalTimeMS: countType === "TIME" ? finalTimeMS * 60000 : null,
         checked: countType === "CHECKBOX" ? false : null,
       },
     });

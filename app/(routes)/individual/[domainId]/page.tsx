@@ -1,11 +1,8 @@
 import db from "@/lib/db";
 import { Relfections } from "./components/reflections/reflections";
-import { AnimatePresence } from "motion/react";
-import { ReflectionsForm } from "./components/reflections/reflections-form";
 import { redirect } from "next/navigation";
 import { DomainHeader } from "./components/header";
 import { Tasks } from "./components/tasks/tasks";
-import { TasksForm } from "./components/tasks/tasks-form";
 
 export default async function DomainPage({
   params,
@@ -25,10 +22,6 @@ export default async function DomainPage({
         <Tasks domain={domain} />
         <Relfections domain={domain} />
       </div>
-      <AnimatePresence>
-        <ReflectionsForm key={"reflections-form"} domainId={domain.id} />
-        <TasksForm key={"tasks-form"} domainId={domain.id} />
-      </AnimatePresence>
     </div>
   );
 }

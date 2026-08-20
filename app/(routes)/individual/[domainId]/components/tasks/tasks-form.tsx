@@ -5,10 +5,12 @@ import { inter } from "../reflections/reflections-form";
 import { Check, X } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import axios from "axios";
+import { Domain } from "@/lib/generated/prisma/client";
 
-export const TasksForm = ({ domainId }: { domainId: string }) => {
+export const TasksForm = ({ domains }: { domains: Domain[] }) => {
   const {
-    open,
+    openTask,
+    domainId,
     setClose,
     setLabel,
     setType,
@@ -16,6 +18,7 @@ export const TasksForm = ({ domainId }: { domainId: string }) => {
     setFrequency,
     setCountType,
     setFinalScore,
+    setDomainId,
     reset,
     deadline,
     type,
@@ -49,13 +52,13 @@ export const TasksForm = ({ domainId }: { domainId: string }) => {
   return (
     <div className="w-full max-h-dvh overflow-y-auto">
       <AnimatePresence>
-        {open && (
+        {openTask && (
           <motion.div
             initial={{ y: "100%" }}
             animate={{ y: 0 }}
             transition={{ duration: 0.2 }}
             exit={{ y: "100%" }}
-            className={`${inter.className} fixed ${open ? "bottom-0" : "bottom-[-100vh]"} w-full h-full bg-[#1e1e1e] z-30 rounded-t-4xl`}
+            className={`${inter.className} fixed ${openTask ? "bottom-0" : "bottom-[-100vh]"} w-full h-full bg-[#1e1e1e] z-30 rounded-t-4xl`}
           >
             <div className="flex items-center justify-between p-5">
               <div
@@ -81,7 +84,7 @@ export const TasksForm = ({ domainId }: { domainId: string }) => {
                   <h1 className={` text-2xl text-white font-semibold`}>
                     Add Task
                   </h1>
-                  <p className="text-white">{open}</p>
+                  <p className="text-white">{openTask}</p>
                 </div>
                 <div className="rounded-4xl bg-[#313131] w-full mt-6 p-5">
                   <div className="flex items-center gap-3">
@@ -179,6 +182,29 @@ export const TasksForm = ({ domainId }: { domainId: string }) => {
                       />
                     </div>
                   )}
+                  <Separator className="my-4" />
+                  <div className="flex items-center justify-between w-full gap-3">
+                    <label
+                      className="text-white/50 font-normal"
+                      htmlFor="task-domain"
+                    >
+                      Domain
+                    </label>
+                    <select
+                      onChange={(e) =>
+                        setDomainId(e.target.value as "REPEATING" | "ONE_TIME")
+                      }
+                      value={domainId}
+                      className="text-right focus:outline-none"
+                      name="task-domain"
+                    >
+                      {domains.map((d) => (
+                        <option key={d.id} className="text-right" value={d.id}>
+                          {d.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
                 {/* -------------------------------------------------------- */}
                 <div className="rounded-4xl bg-[#313131] w-full mt-6 p-5">

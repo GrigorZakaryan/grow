@@ -15,9 +15,6 @@ interface DomainProps {
 export const HomeDomains = ({ domains }: { domains: DomainProps[] }) => {
   return (
     <div className="mt-10 w-full">
-      <div>
-        <h2 className="text-xl">Domains</h2>
-      </div>
       <div className="flex items-center gap-5 mt-3 w-full overflow-y-hidden overflow-x-auto">
         {domains &&
           domains.map((domain) => (

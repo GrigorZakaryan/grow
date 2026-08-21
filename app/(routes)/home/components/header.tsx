@@ -13,7 +13,7 @@ const SFRegular = localFont({
 
 export const Header = () => {
   return (
-    <header>
+    <header className="pb-3 bg-black/50">
       <div>
         <h1 className={`text-2xl font-semibold ${SFSemibold.className}`}>
           Home

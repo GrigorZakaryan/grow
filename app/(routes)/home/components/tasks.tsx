@@ -8,34 +8,47 @@ export const HomeTasks = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const fetchTasks = async () => {
+    try {
+      // Now you are safely in the browser context
+      const localTime = new Date().toISOString();
+      console.log("Local Time client side", localTime);
+      const res = await axios.get(
+        `/home/api/tasks?localTime=${encodeURIComponent(localTime)}`,
+      );
+      setTasks(res.data);
+      console.log(res.data);
+    } catch (err) {
+      console.error(err);
+      // Handle redirect or error state here
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchTasks = async () => {
-      try {
-        // Now you are safely in the browser context
-        const localTime = new Date().toISOString();
-        console.log("Local Time client side", localTime);
-        const res = await axios.get(
-          `/home/api/tasks?localTime=${encodeURIComponent(localTime)}`,
-        );
-        setTasks(res.data);
-        console.log(res.data);
-      } catch (err) {
-        console.error(err);
-        // Handle redirect or error state here
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchTasks();
   }, []);
 
   return (
     <div className="mt-10">
-      <div>
+      <div className="flex items-center justify-between">
         <h2 className="text-xl">Tasks</h2>
+        <div>
+          <p className="text-sm opacity-70">
+            {tasks.filter((t) => t.status === "DONE").length}/{tasks.length}{" "}
+            Completed
+          </p>
+        </div>
       </div>
-      <div className="flex items-center gap-5 mt-3 w-full overflow-y-hidden overflow-x-auto">
-        {tasks && tasks.map((task) => <TaskCard task={task} key={task.id} />)}
+      <div className="flex items-start gap-5 mt-4 w-full overflow-y-hidden overflow-x-auto">
+        {tasks &&
+          tasks.map((task) => (
+            <TaskCard onTaskUpdate={fetchTasks} task={task} key={task.id} />
+          ))}
+        {loading && (
+          <div className="flex min-w-full rounded-2xl bg-muted min-h-50"></div>
+        )}
       </div>
     </div>
   );

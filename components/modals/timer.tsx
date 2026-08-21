@@ -88,7 +88,7 @@ export const Timer = () => {
           transition={{ type: "spring", stiffness: 300, damping: 30 }}
           className="fixed top-0 left-0 w-full p-2 z-1000"
         >
-          <div className="w-full h-full bg-black/80 shadow-inner backdrop-blur-md shadow-white/30 rounded-4xl border border-white/10 flex items-center justify-center text-white p-2">
+          <div className="w-full h-full bg-black/80 backdrop-blur-md rounded-4xl border border-white/10 flex items-center justify-center text-white p-2">
             <div className="flex items-center justify-between w-full h-full">
               <div className="flex-1 flex flex-col items-start justify-between w-full h-full p-5">
                 <div>

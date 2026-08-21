@@ -9,7 +9,15 @@ export const POST = async (
 ) => {
   const body = await req.json();
   const { domainId } = await params;
-  const { label, type, countType, description, finalQty, finalTimeMS } = body;
+  const {
+    label,
+    type,
+    countType,
+    description,
+    finalQty,
+    finalTimeMS,
+    priority,
+  } = body;
   let { deadline, frequency } = body;
 
   // 1. Validation logic
@@ -38,6 +46,7 @@ export const POST = async (
         timeMS: countType === "TIME" ? 0 : null,
         finalTimeMS: countType === "TIME" ? finalTimeMS * 60000 : null,
         checked: countType === "CHECKBOX" ? false : null,
+        priority,
       },
     });
 

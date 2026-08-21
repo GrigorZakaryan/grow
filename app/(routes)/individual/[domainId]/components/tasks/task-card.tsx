@@ -28,7 +28,8 @@ export const TaskCard = ({
   // Use let variables or a helper function to set values
   let currentScore = 0;
   let finalScore = 1;
-  const { setTime, toggleOpen, setTaskId, setDomainId } = useTimer();
+  const { setTime, toggleOpen, setTaskId, setDomainId, taskId, time } =
+    useTimer();
   const [loading, setLoading] = useState(false);
 
   switch (task.countType) {

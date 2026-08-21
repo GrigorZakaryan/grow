@@ -60,6 +60,7 @@ model Task {
   deadline      DateTime?
   frequency     TaskFrequency?
   status        TaskStatus
+  priority      Int   @default(0)
 
   countType     TaskCountType @default(QTY)
 

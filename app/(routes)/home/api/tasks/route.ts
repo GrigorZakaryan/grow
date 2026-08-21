@@ -27,7 +27,7 @@ export const GET = async (req: NextRequest) => {
   // Fetch all tasks (now updated) to return to the client
   const tasks = await db.task.findMany({
     where: { status: { in: ["UPCOMING", "IN_PROGRESS", "DONE"] } },
-    orderBy: { updatedAt: "asc" }, // Optional: ensure consistent order
+    orderBy: { priority: "desc" }, // Optional: ensure consistent order
   });
 
   return NextResponse.json(tasks, { status: 200 });

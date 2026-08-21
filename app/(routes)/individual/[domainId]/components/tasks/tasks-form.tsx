@@ -19,6 +19,7 @@ export const TasksForm = ({ domains }: { domains: Domain[] }) => {
     setCountType,
     setFinalScore,
     setDomainId,
+    setPriority,
     reset,
     deadline,
     type,
@@ -26,6 +27,7 @@ export const TasksForm = ({ domains }: { domains: Domain[] }) => {
     countType,
     finalScore,
     label,
+    priority,
   } = useTaskForm();
 
   const onSubmit = async () => {
@@ -39,6 +41,7 @@ export const TasksForm = ({ domains }: { domains: Domain[] }) => {
         // Map store values to the specific backend fields
         finalQty: countType === "QTY" ? finalScore : null,
         finalTimeMS: countType === "TIME" ? finalScore : null,
+        priority,
       };
 
       await axios.post(`/individual/${domainId}/api/tasks`, payload);
@@ -182,6 +185,34 @@ export const TasksForm = ({ domains }: { domains: Domain[] }) => {
                       />
                     </div>
                   )}
+                  <Separator className="my-4" />
+                  <div className="flex items-center justify-between w-full gap-3">
+                    <label
+                      className="text-white/50 font-normal"
+                      htmlFor="task-domain"
+                    >
+                      Priority
+                    </label>
+                    <select
+                      onChange={(e) => setPriority(Number(e.target.value))}
+                      value={priority}
+                      className="text-right focus:outline-none"
+                      name="task-domain"
+                    >
+                      <option className="text-right" value={3}>
+                        High
+                      </option>
+                      <option className="text-right" value={2}>
+                        Medium
+                      </option>
+                      <option className="text-right" value={1}>
+                        Low
+                      </option>
+                      <option className="text-right" value={0}>
+                        None
+                      </option>
+                    </select>
+                  </div>
                   <Separator className="my-4" />
                   <div className="flex items-center justify-between w-full gap-3">
                     <label

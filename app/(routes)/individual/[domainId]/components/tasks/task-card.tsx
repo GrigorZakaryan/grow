@@ -11,6 +11,7 @@ import {
   Check,
   CircleCheck,
   CircleDashed,
+  CirclePlus,
   Loader,
   PlayCircle,
   Repeat,
@@ -68,6 +69,20 @@ export const TaskCard = ({
       setLoading(true);
       await axios.patch(`/individual/${task.domainId}/${task.id}/api`, {
         checked: true,
+      });
+      await onTaskUpdate();
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const onAddProgress = async () => {
+    try {
+      setLoading(true);
+      await axios.patch(`/individual/${task.domainId}/${task.id}/api`, {
+        qty: 1,
       });
       await onTaskUpdate();
     } catch (err) {
@@ -140,7 +155,7 @@ export const TaskCard = ({
         </div>
         {task.status === "UPCOMING" && (
           <div className="w-full">
-            {task.countType !== "CHECKBOX" ? (
+            {task.countType === "TIME" && (
               <button
                 onClick={() => {
                   if (task.countType === "TIME" && task.finalTimeMS) {
@@ -154,7 +169,8 @@ export const TaskCard = ({
               >
                 <PlayCircle strokeWidth={1.5} className="w-5 h-5" /> Get Started
               </button>
-            ) : (
+            )}
+            {task.countType === "CHECKBOX" && (
               <button
                 disabled={loading}
                 onClick={async () => {
@@ -172,11 +188,29 @@ export const TaskCard = ({
                 )}
               </button>
             )}
+            {task.countType === "QTY" && (
+              <button
+                disabled={loading}
+                onClick={async () => {
+                  await onAddProgress();
+                }}
+                className={`flex items-center justify-center gap-2 w-full rounded-full dark:bg-white dark:text-black font-semibold text-sm py-3 mt-10 ${loading && "opacity-80"}`}
+              >
+                {loading ? (
+                  <Spinner />
+                ) : (
+                  <div className="flex items-center gap-2">
+                    <CirclePlus strokeWidth={1.5} className="w-5 h-5" /> Add
+                    Progress
+                  </div>
+                )}
+              </button>
+            )}
           </div>
         )}
         {task.status === "IN_PROGRESS" && (
           <div className="w-full">
-            {task.countType !== "CHECKBOX" ? (
+            {task.countType === "TIME" && (
               <button
                 onClick={() => {
                   if (task.countType === "TIME" && task.finalTimeMS) {
@@ -190,10 +224,23 @@ export const TaskCard = ({
               >
                 <StepForward strokeWidth={1.5} className="w-5 h-5" /> Resume
               </button>
-            ) : (
-              <button className="flex items-center justify-center gap-2 w-full rounded-full dark:bg-white dark:text-black font-semibold text-sm py-3 mt-10">
-                <CircleCheck strokeWidth={1.5} className="w-5 h-5" /> Mark
-                Completed
+            )}
+            {task.countType === "QTY" && (
+              <button
+                disabled={loading}
+                onClick={async () => {
+                  await onAddProgress();
+                }}
+                className="flex items-center justify-center gap-2 w-full rounded-full dark:bg-white dark:text-black font-semibold text-sm py-3 mt-10"
+              >
+                {loading ? (
+                  <Spinner />
+                ) : (
+                  <div className="flex items-center gap-2">
+                    <CirclePlus strokeWidth={1.5} className="w-5 h-5" /> Add
+                    Progress
+                  </div>
+                )}
               </button>
             )}
           </div>

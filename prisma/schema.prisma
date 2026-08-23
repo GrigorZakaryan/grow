@@ -77,4 +77,5 @@ model Task {
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
+  lastResetAt DateTime?
 }

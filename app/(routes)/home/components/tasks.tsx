@@ -10,17 +10,15 @@ export const HomeTasks = () => {
 
   const fetchTasks = async () => {
     try {
-      // Now you are safely in the browser context
-      const localTime = new Date().toISOString();
-      console.log("Local Time client side", localTime);
+      const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
       const res = await axios.get(
-        `/home/api/tasks?localTime=${encodeURIComponent(localTime)}`,
+        `/home/api/tasks?timeZone=${encodeURIComponent(timeZone)}`,
       );
+
       setTasks(res.data);
-      console.log(res.data);
     } catch (err) {
       console.error(err);
-      // Handle redirect or error state here
     } finally {
       setLoading(false);
     }

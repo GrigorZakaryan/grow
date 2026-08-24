@@ -75,6 +75,10 @@ model Task {
   domainId String
   domain   Domain @relation(fields: [domainId], references: [id])
 
+  day           String?
+  startTime     String?
+  endTime       String?
+
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   lastResetAt DateTime?

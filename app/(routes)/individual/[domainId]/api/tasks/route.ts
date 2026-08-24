@@ -17,6 +17,9 @@ export const POST = async (
     finalQty,
     finalTimeMS,
     priority,
+    day,
+    startTime,
+    endTime,
   } = body;
   let { deadline, frequency } = body;
 
@@ -47,6 +50,9 @@ export const POST = async (
         finalTimeMS: countType === "TIME" ? finalTimeMS * 60000 : null,
         checked: countType === "CHECKBOX" ? false : null,
         priority,
+        day,
+        startTime,
+        endTime,
       },
     });
 

@@ -6,6 +6,8 @@ import { Check, X } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import axios from "axios";
 import { Domain } from "@/lib/generated/prisma/client";
+import { Switch } from "@/components/ui/switch";
+import { useEffect } from "react";
 
 export const TasksForm = ({ domains }: { domains: Domain[] }) => {
   const {
@@ -20,6 +22,15 @@ export const TasksForm = ({ domains }: { domains: Domain[] }) => {
     setFinalScore,
     setDomainId,
     setPriority,
+
+    toggleShowCalendar,
+    setDay,
+    setStartTime,
+    setEndTime,
+    day,
+    startTime,
+    endTime,
+
     reset,
     deadline,
     type,
@@ -28,6 +39,7 @@ export const TasksForm = ({ domains }: { domains: Domain[] }) => {
     finalScore,
     label,
     priority,
+    showCalendar,
   } = useTaskForm();
 
   const onSubmit = async () => {
@@ -42,6 +54,9 @@ export const TasksForm = ({ domains }: { domains: Domain[] }) => {
         finalQty: countType === "QTY" ? finalScore : null,
         finalTimeMS: countType === "TIME" ? finalScore : null,
         priority,
+        day,
+        startTime,
+        endTime,
       };
 
       await axios.post(`/individual/${domainId}/api/tasks`, payload);
@@ -53,7 +68,7 @@ export const TasksForm = ({ domains }: { domains: Domain[] }) => {
   };
 
   return (
-    <div className="w-full max-h-dvh overflow-y-auto">
+    <div className="w-full h-dvh">
       <AnimatePresence>
         {openTask && (
           <motion.div
@@ -61,7 +76,7 @@ export const TasksForm = ({ domains }: { domains: Domain[] }) => {
             animate={{ y: 0 }}
             transition={{ duration: 0.2 }}
             exit={{ y: "100%" }}
-            className={`${inter.className} fixed ${openTask ? "bottom-0" : "bottom-[-100vh]"} w-full h-full bg-[#1e1e1e] z-30 rounded-t-4xl`}
+            className={`${inter.className} fixed ${openTask ? "bottom-0" : "bottom-[-100vh]"} w-full h-full bg-[#1e1e1e] z-99 rounded-t-4xl overflow-y-auto`}
           >
             <div className="flex items-center justify-between p-5">
               <div
@@ -81,14 +96,8 @@ export const TasksForm = ({ domains }: { domains: Domain[] }) => {
               </div>
             </div>
 
-            <div className="flex justify-center px-5 py-5">
-              <div className="flex flex-col items-start w-full">
-                <div className="flex flex-col items-center justify-center gap-3">
-                  <h1 className={` text-2xl text-white font-semibold`}>
-                    Add Task
-                  </h1>
-                  <p className="text-white">{openTask}</p>
-                </div>
+            <div className="flex justify-center px-5 py-5 h-full">
+              <div className="flex flex-col items-start w-full pb-30">
                 <div className="rounded-4xl bg-[#313131] w-full mt-6 p-5">
                   <div className="flex items-center gap-3">
                     <label
@@ -301,6 +310,77 @@ export const TasksForm = ({ domains }: { domains: Domain[] }) => {
                         id="task-goal"
                         placeholder="e.g. 20 (minutes)"
                         type="number"
+                      />
+                    </div>
+                  )}
+                </div>
+                {/* ----------------------------SHOW ON CALENDAR----------------------------- */}
+                <div className="rounded-4xl bg-[#313131] w-full mt-6 p-5">
+                  <div className="flex items-center justify-between w-full gap-3">
+                    <label
+                      className="text-white/50 font-normal"
+                      htmlFor="task-show-calendar"
+                    >
+                      Show on Calendar
+                    </label>
+                    <Switch
+                      id="task-show-calendar"
+                      onClick={() => toggleShowCalendar()}
+                      checked={showCalendar}
+                    />
+                  </div>
+                  {showCalendar && <Separator className="my-4" />}
+                  {showCalendar && (
+                    <div className="flex items-center justify-between gap-3">
+                      <label
+                        className="text-white/50 font-normal"
+                        htmlFor="task-day"
+                      >
+                        Day
+                      </label>
+                      <input
+                        onChange={(e) => setDay(e.target.value)}
+                        value={day}
+                        className="text-right text-white focus:outline-none"
+                        id="task-day"
+                        placeholder="e.g. 10 (times)"
+                        type="date"
+                      />
+                    </div>
+                  )}
+                  {showCalendar && <Separator className="my-4" />}
+                  {showCalendar && (
+                    <div className="flex items-center justify-between gap-3">
+                      <label
+                        className="text-white/50 font-normal"
+                        htmlFor="task-day"
+                      >
+                        Start Time
+                      </label>
+                      <input
+                        onChange={(e) => setStartTime(e.target.value)}
+                        value={startTime}
+                        className="text-right text-white focus:outline-none"
+                        id="task-day"
+                        type="time"
+                      />
+                    </div>
+                  )}
+                  {showCalendar && <Separator className="my-4" />}
+                  {showCalendar && (
+                    <div className="flex items-center justify-between gap-3">
+                      <label
+                        className="text-white/50 font-normal"
+                        htmlFor="task-day"
+                      >
+                        End Time
+                      </label>
+                      <input
+                        onChange={(e) => setEndTime(e.target.value)}
+                        value={endTime}
+                        className="text-right text-white focus:outline-none"
+                        id="task-day"
+                        type="time"
                       />
                     </div>
                   )}

@@ -13,6 +13,11 @@ type TaskFormProps = {
   openTask: boolean;
   priority: number;
 
+  showCalendar: boolean;
+  day: string;
+  startTime: string;
+  endTime: string;
+
   setLabel: (text: string) => void;
   setDeadline: (date: Date) => void;
   setType: (type: "ONE_TIME" | "REPEATING") => void;
@@ -21,6 +26,11 @@ type TaskFormProps = {
   setCountType: (type: "QTY" | "TIME" | "CHECKBOX") => void;
   setFinalScore: (num: number) => void;
   setCurrentScore: (num: number) => void;
+
+  toggleShowCalendar: () => void;
+  setDay: (d: string) => void;
+  setStartTime: (t: string) => void;
+  setEndTime: (t: string) => void;
 
   setPriority: (num: number) => void;
 
@@ -50,6 +60,11 @@ export const useTaskForm = create<TaskFormProps>((set) => ({
   openTask: false,
   domainId: "",
 
+  showCalendar: false,
+  day: "",
+  startTime: "",
+  endTime: "",
+
   setLabel: (text: string) => set(() => ({ label: text })),
 
   setClose: () => set(() => ({ openTask: false })),
@@ -66,6 +81,11 @@ export const useTaskForm = create<TaskFormProps>((set) => ({
   setPriority: (num) => set((e) => ({ priority: num })),
 
   setDomainId: (id: string) => set((e) => ({ domainId: id })),
+
+  toggleShowCalendar: () => set((e) => ({ showCalendar: !e.showCalendar })),
+  setDay: (d: string) => set((e) => ({ day: d })),
+  setStartTime: (t) => set((e) => ({ startTime: t })),
+  setEndTime: (t) => set((e) => ({ endTime: t })),
 
   setStatus: (status: "UPCOMING" | "IN_PROGRESS" | "DONE") =>
     set(() => ({ status })),

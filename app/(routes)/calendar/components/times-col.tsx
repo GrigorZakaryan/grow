@@ -4,10 +4,12 @@ import { useEffect, useMemo, useState } from "react";
 import { format } from "date-fns";
 import { Task } from "@/lib/generated/prisma/client";
 import { generateTime } from "../utils/generateDates";
+import { useSelectDay } from "../store/useSelectDay";
 
 export const TimesCol = ({ tasks }: { tasks: Task[] }) => {
   const times = generateTime();
   const [currentDate, setCurrentDate] = useState<Date | null>(null);
+  const { selectedDay } = useSelectDay();
 
   useEffect(() => {
     const updateTime = () => {
@@ -30,6 +32,7 @@ export const TimesCol = ({ tasks }: { tasks: Task[] }) => {
 
   const tasksWithLayout = useMemo(() => {
     return tasks
+      .filter((task) => task.day === selectedDay)
       .map((task) => {
         if (!task.day || !task.startTime || !task.endTime) {
           return null;
@@ -60,7 +63,7 @@ export const TimesCol = ({ tasks }: { tasks: Task[] }) => {
         };
       })
       .filter((task): task is NonNullable<typeof task> => task !== null);
-  }, [tasks]);
+  }, [tasks, selectedDay]);
 
   return (
     <div className="flex h-full w-full flex-col overflow-y-scroll pb-40">
@@ -107,16 +110,19 @@ export const TimesCol = ({ tasks }: { tasks: Task[] }) => {
               ))}
 
               {/* Current time line */}
-              {isCurrentHour && (
-                <div
-                  className="absolute left-0 z-10 h-px w-full bg-red-500"
-                  style={{
-                    top: `${currentMinutePercent}%`,
-                  }}
-                >
-                  <div className="absolute -left-1 top-1/2 z-10 h-2 w-2 -translate-y-1/2 rounded-full bg-red-500" />
-                </div>
-              )}
+              {currentDate &&
+              selectedDay === currentDate.toLocaleDateString("en-CA")
+                ? isCurrentHour && (
+                    <div
+                      className="absolute left-0 z-10 h-px w-full bg-red-500"
+                      style={{
+                        top: `${currentMinutePercent}%`,
+                      }}
+                    >
+                      <div className="absolute -left-1 top-1/2 z-10 h-2 w-2 -translate-y-1/2 rounded-full bg-red-500" />
+                    </div>
+                  )
+                : null}
             </div>
           </div>
         );

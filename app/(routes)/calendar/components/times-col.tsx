@@ -6,10 +6,25 @@ import { Task } from "@/lib/generated/prisma/client";
 import { generateTime } from "../utils/generateDates";
 import { useSelectDay } from "../store/useSelectDay";
 
-export const TimesCol = ({ tasks }: { tasks: Task[] }) => {
+interface ActivityProps {
+  id: string;
+  date: Date;
+  duration: number | null;
+  taskId: string | null;
+  task: Task | null;
+}
+
+export const TimesCol = ({
+  tasks,
+  activities,
+}: {
+  tasks: Task[];
+  activities: ActivityProps[];
+}) => {
   const times = generateTime();
   const [currentDate, setCurrentDate] = useState<Date | null>(null);
   const { selectedDay } = useSelectDay();
+  const [showActivity, setShowActivity] = useState(false);
 
   useEffect(() => {
     const updateTime = () => {
@@ -29,6 +44,23 @@ export const TimesCol = ({ tasks }: { tasks: Task[] }) => {
 
     return new Date(year, month - 1, date, hours, minutes);
   };
+
+  const activitiesWithLayout = useMemo(() => {
+    return activities
+      .filter(
+        (activity) => activity.date.toLocaleDateString("en-CA") === selectedDay,
+      )
+      .map((activity) => {
+        const duration = activity.duration ? activity.duration / 60_000 : 0;
+
+        return {
+          ...activity,
+          hour: activity.date.getHours(),
+          top: (activity.date.getMinutes() / 60) * 100,
+          height: (duration / 60) * 100 < 10 ? 20 : (duration / 60) * 100,
+        };
+      });
+  }, [activities, selectedDay]);
 
   const tasksWithLayout = useMemo(() => {
     return tasks
@@ -66,67 +98,103 @@ export const TimesCol = ({ tasks }: { tasks: Task[] }) => {
   }, [tasks, selectedDay]);
 
   return (
-    <div className="flex h-full w-full flex-col overflow-y-scroll pb-40">
-      {times.map((time, idx) => {
-        const isCurrentHour =
-          currentDate !== null && currentDate.getHours() === idx;
+    <div className="flex flex-col w-full h-full pb-25">
+      <div className="flex items-center justify-between w-full pb-5">
+        <button
+          onClick={() => setShowActivity(false)}
+          className={`py-2 flex items-center justify-center w-full text-center font-medium ${!showActivity ? "border-b border-white text-white" : "opacity-70"}`}
+        >
+          Tasks
+        </button>
+        <button
+          onClick={() => setShowActivity(true)}
+          className={`flex items-center justify-center w-full text-center py-2 font-medium ${showActivity ? "border-b border-white text-white" : "opacity-70"}`}
+        >
+          Activites
+        </button>
+      </div>
+      <div className="flex h-full w-full flex-col overflow-y-scroll pb-40">
+        {times.map((time, idx) => {
+          const isCurrentHour =
+            currentDate !== null && currentDate.getHours() === idx;
 
-        const currentMinutePercent = currentDate
-          ? (currentDate.getMinutes() / 60) * 100
-          : 0;
+          const currentMinutePercent = currentDate
+            ? (currentDate.getMinutes() / 60) * 100
+            : 0;
 
-        const hourTasks = tasksWithLayout.filter((task) => task.hour === idx);
+          const hourTasks = tasksWithLayout.filter((task) => task.hour === idx);
+          const hourActivity = activitiesWithLayout.filter(
+            (activity) => activity.hour === idx,
+          );
 
-        return (
-          <div
-            key={idx}
-            className="flex h-25 min-h-25 w-full shrink-0 items-center"
-          >
-            {/* Time label */}
-            <div className="flex h-full w-13 shrink-0 items-start justify-start pr-2">
-              <span className="text-xs text-white/50">
-                {format(new Date(time), "HH:mm")}
-              </span>
-            </div>
-
-            {/* Hour */}
+          return (
             <div
-              className={`relative h-full w-full border-l ${
-                idx === times.length - 1 ? "" : "border-b"
-              }`}
+              key={idx}
+              className="flex h-25 min-h-25 w-full shrink-0 items-center"
             >
-              {/* Tasks */}
-              {hourTasks.map((task) => (
-                <div
-                  key={task.id}
-                  className={`absolute z-5 w-full rounded-lg ${task.type === "REPEATING" ? "bg-blue-500" : "bg-pink-500"} px-2 overflow-hidden border border-black`}
-                  style={{
-                    top: `${task.top}%`,
-                    height: `${task.height}%`,
-                  }}
-                >
-                  <h6 className="text-xs font-medium">{task.label}</h6>
-                </div>
-              ))}
+              {/* Time label */}
+              <div className="flex h-full w-13 shrink-0 items-start justify-start pr-2">
+                <span className="text-xs text-white/50">
+                  {format(new Date(time), "HH:mm")}
+                </span>
+              </div>
 
-              {/* Current time line */}
-              {currentDate &&
-              selectedDay === currentDate.toLocaleDateString("en-CA")
-                ? isCurrentHour && (
+              {/* Hour */}
+              <div
+                className={`relative h-full w-full border-l ${
+                  idx === times.length - 1 ? "" : "border-b"
+                }`}
+              >
+                {/* Tasks */}
+                {!showActivity &&
+                  hourTasks.map((task) => (
                     <div
-                      className="absolute left-0 z-10 h-px w-full bg-red-500"
+                      key={task.id}
+                      className={`absolute z-5 w-full rounded-lg bg-blue-500 px-2 overflow-hidden border border-black`}
                       style={{
-                        top: `${currentMinutePercent}%`,
+                        top: `${task.top}%`,
+                        height: `${task.height}%`,
                       }}
                     >
-                      <div className="absolute -left-1 top-1/2 z-10 h-2 w-2 -translate-y-1/2 rounded-full bg-red-500" />
+                      <h6 className="text-xs font-medium">{task.label}</h6>
                     </div>
-                  )
-                : null}
+                  ))}
+
+                {/* Activites */}
+                {showActivity &&
+                  hourActivity.map((activity) => (
+                    <div
+                      key={activity.id}
+                      className={`absolute z-5 w-full rounded-lg px-2 bg-green-500 overflow-hidden border border-black`}
+                      style={{
+                        top: `${activity.top}%`,
+                        height: `${activity.height}%`,
+                      }}
+                    >
+                      <h6 className="text-xs font-medium">
+                        {activity.task?.label}
+                      </h6>
+                    </div>
+                  ))}
+                {/* Current time line */}
+                {currentDate &&
+                selectedDay === currentDate.toLocaleDateString("en-CA")
+                  ? isCurrentHour && (
+                      <div
+                        className="absolute left-0 z-10 h-px w-full bg-red-500"
+                        style={{
+                          top: `${currentMinutePercent}%`,
+                        }}
+                      >
+                        <div className="absolute -left-1 top-1/2 z-10 h-2 w-2 -translate-y-1/2 rounded-full bg-red-500" />
+                      </div>
+                    )
+                  : null}
+              </div>
             </div>
-          </div>
-        );
-      })}
+          );
+        })}
+      </div>
     </div>
   );
 };

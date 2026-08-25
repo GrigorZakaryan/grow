@@ -45,7 +45,7 @@ export const DaysRow = () => {
           <div
             key={day}
             onClick={() => setSelectDay(day)}
-            className={`w-full flex flex-col items-center justify-center py-3 rounded-lg duration-200 cursor-pointer ${
+            className={`w-full flex flex-col items-center justify-center py-2 rounded-lg duration-200 cursor-pointer ${
               isSelected
                 ? "bg-white text-black"
                 : isToday

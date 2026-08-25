@@ -79,7 +79,19 @@ model Task {
   startTime     String?
   endTime       String?
 
+  activity      Activity[]
+
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   lastResetAt DateTime?
+}
+
+model Activity {
+  id            String @id @default(uuid())
+
+  date          DateTime  @default(now())
+  duration      Int?
+
+  taskId        String?
+  task          Task?  @relation(fields: [taskId], references: [id])
 }

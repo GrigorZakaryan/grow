@@ -65,7 +65,11 @@ export const PATCH = async (
   });
 
   const activity = await db.activity.create({
-    data: { taskId, duration: body.time },
+    data: {
+      taskId,
+      duration: body.time,
+      date: new Date(Date.now() - (body.time ?? 600000)),
+    },
   });
 
   return NextResponse.json({ task: updatedTask, activity }, { status: 200 });

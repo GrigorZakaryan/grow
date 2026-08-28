@@ -64,7 +64,13 @@ export const TimesCol = ({
 
   const tasksWithLayout = useMemo(() => {
     return tasks
-      .filter((task) => task.day === selectedDay)
+      .filter((task) => {
+        if (task.type === "REPEATING") {
+          return task;
+        } else if (task.day === selectedDay) {
+          return task;
+        }
+      })
       .map((task) => {
         if (!task.day || !task.startTime || !task.endTime) {
           return null;

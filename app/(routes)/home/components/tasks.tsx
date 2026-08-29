@@ -33,13 +33,10 @@ export const HomeTasks = () => {
       <div className="flex items-center justify-between">
         <h2 className="text-xl">Tasks</h2>
         <div>
-          <p className="text-sm opacity-70">
-            {tasks.filter((t) => t.status === "DONE").length}/{tasks.length}{" "}
-            Completed
-          </p>
+          <p className="text-sm opacity-70">{tasks.length} Remaining</p>
         </div>
       </div>
-      <div className="flex items-start gap-5 mt-4 w-full overflow-y-hidden overflow-x-auto">
+      <div className="flex flex-col items-start gap-5 mt-4 w-full overflow-x-hidden overflow-y-auto">
         {tasks &&
           tasks.map((task) => (
             <TaskCard onTaskUpdate={fetchTasks} task={task} key={task.id} />

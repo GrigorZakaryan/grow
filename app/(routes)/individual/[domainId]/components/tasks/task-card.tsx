@@ -18,6 +18,7 @@ import {
   StepForward,
 } from "lucide-react";
 import { useState } from "react";
+import { useTaskForm } from "../../stores/use-task-form";
 
 export const TaskCard = ({
   task,
@@ -31,6 +32,7 @@ export const TaskCard = ({
   let finalScore = 1;
   const { setTime, toggleOpen, setTaskId, setDomainId, taskId, time } =
     useTimer();
+  const {} = useTaskForm();
   const [loading, setLoading] = useState(false);
 
   switch (task.countType) {

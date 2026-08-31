@@ -1,8 +1,5 @@
 import db from "@/lib/db";
-import { ChevronLeft, MoreVertical } from "lucide-react";
 import { redirect } from "next/navigation";
-import FireRed from "@/public/fire.svg";
-import Image from "next/image";
 import { TaskControlForm } from "./components/task-control-form";
 
 export default async function TaskPage({

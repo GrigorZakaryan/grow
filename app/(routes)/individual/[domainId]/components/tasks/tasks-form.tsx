@@ -7,7 +7,6 @@ import { Separator } from "@/components/ui/separator";
 import axios from "axios";
 import { Domain } from "@/lib/generated/prisma/client";
 import { Switch } from "@/components/ui/switch";
-import { useEffect } from "react";
 
 export const TasksForm = ({ domains }: { domains: Domain[] }) => {
   const {

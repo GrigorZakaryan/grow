@@ -1,8 +1,6 @@
 import db from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 
-// app/individual/[domainId]/api/tasks/route.ts
-
 export const POST = async (
   req: NextRequest,
   { params }: { params: Promise<{ domainId: string }> },

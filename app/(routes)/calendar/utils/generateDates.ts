@@ -1,21 +1,19 @@
 "use client";
 
 export const generateDates = () => {
-  const date = new Date();
+  const today = new Date();
 
-  const day = date.getDay(); // 0 = Sunday, 1 = Monday, ...
-  const diff = day === 0 ? -6 : 1 - day;
+  const daysBefore = 90;
+  const daysAfter = 90;
 
-  const startOfWeek = new Date(date);
-  startOfWeek.setDate(date.getDate() + diff);
+  const dates = Array.from({ length: daysBefore + daysAfter + 1 }, (_, i) => {
+    const date = new Date(today);
+    date.setDate(today.getDate() - daysBefore + i);
 
-  const dates = Array.from({ length: 7 }, (_, i) => {
-    const current = new Date(startOfWeek);
-    current.setDate(startOfWeek.getDate() + i);
-    return current;
+    return date.toLocaleDateString("en-CA");
   });
 
-  return dates.map((d) => d.toLocaleDateString("en-CA"));
+  return dates;
 };
 
 export const generateTime = () => {

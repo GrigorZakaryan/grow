@@ -33,7 +33,6 @@ type TaskFormProps = {
   setEndTime: (t: string) => void;
 
   setPriority: (num: number) => void;
-
   setStatus: (status: "UPCOMING" | "IN_PROGRESS" | "DONE") => void;
   setClose: () => void;
   setDomainId: (id: string) => void;

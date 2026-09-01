@@ -24,7 +24,6 @@ export const TimesCol = ({
   const times = generateTime();
   const [currentDate, setCurrentDate] = useState<Date | null>(null);
   const { selectedDay } = useSelectDay();
-  const [showActivity, setShowActivity] = useState(false);
 
   useEffect(() => {
     const updateTime = () => {
@@ -104,20 +103,13 @@ export const TimesCol = ({
   }, [tasks, selectedDay]);
 
   return (
-    <div className="flex flex-col w-full h-full pb-25">
-      <div className="flex items-center justify-between w-full pb-5">
-        <button
-          onClick={() => setShowActivity(false)}
-          className={`py-2 flex items-center justify-center w-full text-center font-medium ${!showActivity ? "border-b border-white text-white" : "opacity-70"}`}
-        >
-          Tasks
-        </button>
-        <button
-          onClick={() => setShowActivity(true)}
-          className={`flex items-center justify-center w-full text-center py-2 font-medium ${showActivity ? "border-b border-white text-white" : "opacity-70"}`}
-        >
-          Activites
-        </button>
+    <div className="flex flex-col w-full h-full pb-25 pt-5">
+      <div className="flex items-center w-full">
+        <div className="w-15 bg-black" />
+        <div className="w-full flex items-center text-center border-b pb-2">
+          <div className="w-[50%]">Plan</div>
+          <div className="w-[50%]">Activity</div>
+        </div>
       </div>
       <div className="flex h-full w-full flex-col overflow-y-scroll pb-40">
         {times.map((time, idx) => {
@@ -152,36 +144,34 @@ export const TimesCol = ({
                 }`}
               >
                 {/* Tasks */}
-                {!showActivity &&
-                  hourTasks.map((task) => (
-                    <div
-                      key={task.id}
-                      className={`absolute z-5 w-full rounded-lg bg-blue-500 px-2 overflow-hidden border border-black`}
-                      style={{
-                        top: `${task.top}%`,
-                        height: `${task.height}%`,
-                      }}
-                    >
-                      <h6 className="text-xs font-medium">{task.label}</h6>
-                    </div>
-                  ))}
+                {hourTasks.map((task) => (
+                  <div
+                    key={task.id}
+                    className={`absolute z-5 w-[50%] left-0 rounded-lg bg-blue-800 px-2 overflow-hidden border border-black`}
+                    style={{
+                      top: `${task.top}%`,
+                      height: `${task.height}%`,
+                    }}
+                  >
+                    <h6 className="text-xs font-medium">{task.label}</h6>
+                  </div>
+                ))}
 
                 {/* Activites */}
-                {showActivity &&
-                  hourActivity.map((activity) => (
-                    <div
-                      key={activity.id}
-                      className={`absolute z-5 w-full rounded-lg px-2 bg-green-500 overflow-hidden border border-black`}
-                      style={{
-                        top: `${activity.top}%`,
-                        height: `${activity.height}%`,
-                      }}
-                    >
-                      <h6 className="text-xs font-medium">
-                        {activity.task?.label}
-                      </h6>
-                    </div>
-                  ))}
+                {hourActivity.map((activity) => (
+                  <div
+                    key={activity.id}
+                    className={`absolute z-5 w-[50%] right-0 rounded-lg px-2 bg-[#d81159] overflow-hidden border border-black`}
+                    style={{
+                      top: `${activity.top}%`,
+                      height: `${activity.height}%`,
+                    }}
+                  >
+                    <h6 className="text-xs font-medium">
+                      {activity.task?.label}
+                    </h6>
+                  </div>
+                ))}
                 {/* Current time line */}
                 {currentDate &&
                 selectedDay === currentDate.toLocaleDateString("en-CA")

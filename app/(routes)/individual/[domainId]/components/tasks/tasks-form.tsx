@@ -7,58 +7,62 @@ import { Separator } from "@/components/ui/separator";
 import axios from "axios";
 import { Domain } from "@/lib/generated/prisma/client";
 import { Switch } from "@/components/ui/switch";
+import { Controller, useForm, useWatch } from "react-hook-form";
+
+type TaskFormValues = {
+  label: string;
+  domainId: string;
+  type: "ONE_TIME" | "REPEATING";
+  deadline: string;
+  frequency: "DAILY" | "WEEKLY" | "MONTHLY";
+  countType: "QTY" | "TIME" | "CHECKBOX";
+  finalScore?: number;
+  priority: number;
+  showCalendar: boolean;
+  day: string;
+  startTime: string;
+  endTime: string;
+};
 
 export const TasksForm = ({ domains }: { domains: Domain[] }) => {
-  const {
-    openTask,
-    domainId,
-    setClose,
-    setLabel,
-    setType,
-    setDeadline,
-    setFrequency,
-    setCountType,
-    setFinalScore,
-    setDomainId,
-    setPriority,
+  const { openTask, setClose } = useTaskForm();
+  const { control, register, handleSubmit, reset } = useForm<TaskFormValues>({
+    defaultValues: {
+      label: "",
+      domainId: domains[0]?.id ?? "",
+      type: "REPEATING",
+      deadline: "",
+      frequency: "DAILY",
+      countType: "QTY",
+      priority: 0,
+      showCalendar: false,
+      day: "",
+      startTime: "",
+      endTime: "",
+    },
+  });
+  const type = useWatch({ control, name: "type" });
+  const countType = useWatch({ control, name: "countType" });
+  const showCalendar = useWatch({ control, name: "showCalendar" });
 
-    toggleShowCalendar,
-    setDay,
-    setStartTime,
-    setEndTime,
-    day,
-    startTime,
-    endTime,
-
-    reset,
-    deadline,
-    type,
-    frequency,
-    countType,
-    finalScore,
-    label,
-    priority,
-    showCalendar,
-  } = useTaskForm();
-
-  const onSubmit = async () => {
+  const onSubmit = async (values: TaskFormValues) => {
     try {
       const payload = {
-        label,
-        type,
-        deadline,
-        frequency,
-        countType,
+        label: values.label,
+        type: values.type,
+        deadline: values.deadline ? new Date(values.deadline) : undefined,
+        frequency: values.frequency,
+        countType: values.countType,
         // Map store values to the specific backend fields
-        finalQty: countType === "QTY" ? finalScore : null,
-        finalTimeMS: countType === "TIME" ? finalScore : null,
-        priority,
-        day,
-        startTime,
-        endTime,
+        finalQty: values.countType === "QTY" ? values.finalScore : null,
+        finalTimeMS: values.countType === "TIME" ? values.finalScore : null,
+        priority: values.priority,
+        day: values.day,
+        startTime: values.startTime,
+        endTime: values.endTime,
       };
 
-      await axios.post(`/individual/${domainId}/api/tasks`, payload);
+      await axios.post(`/individual/${values.domainId}/api/tasks`, payload);
       reset();
       setClose();
     } catch (err) {
@@ -88,7 +92,7 @@ export const TasksForm = ({ domains }: { domains: Domain[] }) => {
                 <X className="text-white" />
               </div>
               <div
-                onClick={() => onSubmit()}
+                onClick={handleSubmit(onSubmit)}
                 className="p-3 bg-white/10 rounded-full border border-white/15 active:bg-white/50 transition active:scale-150 duration-200"
               >
                 <Check className="text-white" />
@@ -106,8 +110,7 @@ export const TasksForm = ({ domains }: { domains: Domain[] }) => {
                       Label
                     </label>
                     <input
-                      onChange={(e) => setLabel(e.target.value)}
-                      value={label}
+                      {...register("label")}
                       className="w-full text-right text-white focus:outline-none"
                       placeholder="e.g. Finish homework"
                       id="task-label"
@@ -123,12 +126,8 @@ export const TasksForm = ({ domains }: { domains: Domain[] }) => {
                       Type
                     </label>
                     <select
-                      onChange={(e) =>
-                        setType(e.target.value as "REPEATING" | "ONE_TIME")
-                      }
-                      value={type}
+                      {...register("type")}
                       className="text-right focus:outline-none"
-                      name="task-type"
                     >
                       <option className="text-right" value="REPEATING">
                         Repeating
@@ -148,14 +147,8 @@ export const TasksForm = ({ domains }: { domains: Domain[] }) => {
                         Frequency
                       </label>
                       <select
-                        onChange={(e) => {
-                          setFrequency(
-                            e.target.value as "DAILY" | "WEEKLY" | "MONTHLY",
-                          );
-                        }}
-                        value={frequency}
+                        {...register("frequency")}
                         className="text-right focus:outline-none"
-                        name="task-frequency"
                       >
                         <option className="text-right" value="DAILY">
                           Daily
@@ -177,20 +170,7 @@ export const TasksForm = ({ domains }: { domains: Domain[] }) => {
                       >
                         Deadline
                       </label>
-                      <input
-                        value={
-                          deadline
-                            ? new Date(
-                                deadline.getTime() -
-                                  deadline.getTimezoneOffset() * 60000,
-                              )
-                                .toISOString()
-                                .slice(0, 16)
-                            : ""
-                        }
-                        type="datetime-local"
-                        onChange={(e) => setDeadline(new Date(e.target.value))}
-                      />
+                      <input type="datetime-local" {...register("deadline")} />
                     </div>
                   )}
                   <Separator className="my-4" />
@@ -202,10 +182,8 @@ export const TasksForm = ({ domains }: { domains: Domain[] }) => {
                       Priority
                     </label>
                     <select
-                      onChange={(e) => setPriority(Number(e.target.value))}
-                      value={priority}
+                      {...register("priority", { valueAsNumber: true })}
                       className="text-right focus:outline-none"
-                      name="task-domain"
                     >
                       <option className="text-right" value={3}>
                         High
@@ -230,12 +208,8 @@ export const TasksForm = ({ domains }: { domains: Domain[] }) => {
                       Domain
                     </label>
                     <select
-                      onChange={(e) =>
-                        setDomainId(e.target.value as "REPEATING" | "ONE_TIME")
-                      }
-                      value={domainId}
+                      {...register("domainId")}
                       className="text-right focus:outline-none"
-                      name="task-domain"
                     >
                       {domains.map((d) => (
                         <option key={d.id} className="text-right" value={d.id}>
@@ -255,14 +229,8 @@ export const TasksForm = ({ domains }: { domains: Domain[] }) => {
                       Count Type
                     </label>
                     <select
-                      onChange={(e) => {
-                        setCountType(
-                          e.target.value as "TIME" | "QTY" | "CHECKBOX",
-                        );
-                      }}
-                      value={countType}
+                      {...register("countType")}
                       className="text-right focus:outline-none"
-                      name="count-type"
                     >
                       <option className="text-right" value="QTY">
                         Quantity
@@ -285,8 +253,7 @@ export const TasksForm = ({ domains }: { domains: Domain[] }) => {
                         Goal
                       </label>
                       <input
-                        onChange={(e) => setFinalScore(Number(e.target.value))}
-                        value={finalScore ? finalScore.toString() : ""}
+                        {...register("finalScore", { valueAsNumber: true })}
                         className="w-full text-right text-white focus:outline-none"
                         id="task-goal"
                         placeholder="e.g. 10 (times)"
@@ -303,8 +270,7 @@ export const TasksForm = ({ domains }: { domains: Domain[] }) => {
                         Goal
                       </label>
                       <input
-                        onChange={(e) => setFinalScore(Number(e.target.value))}
-                        value={finalScore ? finalScore.toString() : ""}
+                        {...register("finalScore", { valueAsNumber: true })}
                         className="w-full text-right text-white focus:outline-none"
                         id="task-goal"
                         placeholder="e.g. 20 (minutes)"
@@ -322,10 +288,16 @@ export const TasksForm = ({ domains }: { domains: Domain[] }) => {
                     >
                       Show on Calendar
                     </label>
-                    <Switch
-                      id="task-show-calendar"
-                      onClick={() => toggleShowCalendar()}
-                      checked={showCalendar}
+                    <Controller
+                      name="showCalendar"
+                      control={control}
+                      render={({ field }) => (
+                        <Switch
+                          id="task-show-calendar"
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      )}
                     />
                   </div>
                   {showCalendar && <Separator className="my-4" />}
@@ -338,8 +310,7 @@ export const TasksForm = ({ domains }: { domains: Domain[] }) => {
                         Day
                       </label>
                       <input
-                        onChange={(e) => setDay(e.target.value)}
-                        value={day}
+                        {...register("day")}
                         className="text-right text-white focus:outline-none"
                         id="task-day"
                         placeholder="e.g. 10 (times)"
@@ -357,8 +328,7 @@ export const TasksForm = ({ domains }: { domains: Domain[] }) => {
                         Start Time
                       </label>
                       <input
-                        onChange={(e) => setStartTime(e.target.value)}
-                        value={startTime}
+                        {...register("startTime")}
                         className="text-right text-white focus:outline-none"
                         id="task-day"
                         type="time"
@@ -375,8 +345,7 @@ export const TasksForm = ({ domains }: { domains: Domain[] }) => {
                         End Time
                       </label>
                       <input
-                        onChange={(e) => setEndTime(e.target.value)}
-                        value={endTime}
+                        {...register("endTime")}
                         className="text-right text-white focus:outline-none"
                         id="task-day"
                         type="time"

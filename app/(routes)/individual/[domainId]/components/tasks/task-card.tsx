@@ -12,12 +12,14 @@ import {
   CircleCheck,
   CircleDashed,
   CirclePlus,
+  Edit,
   Loader,
   PlayCircle,
   Repeat,
   StepForward,
 } from "lucide-react";
 import { useState } from "react";
+import { useTaskForm } from "../../stores/use-task-form";
 
 export const TaskCard = ({
   task,
@@ -32,6 +34,7 @@ export const TaskCard = ({
   const { setTime, toggleOpen, setTaskId, setDomainId, taskId, time } =
     useTimer();
   const [loading, setLoading] = useState(false);
+  const { setTask } = useTaskForm();
 
   switch (task.countType) {
     case "CHECKBOX":
@@ -154,7 +157,15 @@ export const TaskCard = ({
           </div>
         </div>
         {task.status === "UPCOMING" && (
-          <div className="w-full">
+          <div className="w-full flex items-center justify-center gap-2 mt-10">
+            <button
+              onClick={() => {
+                setTask(task);
+              }}
+              className="h-full py-3 px-3 rounded-full bg-white/10 border"
+            >
+              <Edit className="w-5 h-5" />
+            </button>
             {task.countType === "TIME" && (
               <button
                 onClick={() => {
@@ -165,7 +176,7 @@ export const TaskCard = ({
                     toggleOpen();
                   }
                 }}
-                className="flex items-center justify-center gap-2 w-full rounded-full dark:bg-white dark:text-black font-semibold text-sm py-3 mt-10"
+                className="flex items-center justify-center gap-2 w-full rounded-full dark:bg-white dark:text-black font-semibold text-sm py-3 "
               >
                 <PlayCircle strokeWidth={1.5} className="w-5 h-5" /> Get Started
               </button>
@@ -176,7 +187,7 @@ export const TaskCard = ({
                 onClick={async () => {
                   await onCheck();
                 }}
-                className={`flex items-center justify-center gap-2 w-full rounded-full dark:bg-white dark:text-black font-semibold text-sm py-3 mt-10 ${loading && "opacity-80"}`}
+                className={`flex items-center justify-center gap-2 w-full rounded-full dark:bg-white dark:text-black font-semibold text-sm py-3 ${loading && "opacity-80"}`}
               >
                 {loading ? (
                   <Spinner />
@@ -194,7 +205,7 @@ export const TaskCard = ({
                 onClick={async () => {
                   await onAddProgress();
                 }}
-                className={`flex items-center justify-center gap-2 w-full rounded-full dark:bg-white dark:text-black font-semibold text-sm py-3 mt-10 ${loading && "opacity-80"}`}
+                className={`flex items-center justify-center gap-2 w-full rounded-full dark:bg-white dark:text-black font-semibold text-sm py-3  ${loading && "opacity-80"}`}
               >
                 {loading ? (
                   <Spinner />
@@ -220,7 +231,7 @@ export const TaskCard = ({
                     toggleOpen();
                   }
                 }}
-                className="flex items-center justify-center gap-2 w-full rounded-full dark:bg-white dark:text-black font-semibold text-sm py-3 mt-10"
+                className="flex items-center justify-center gap-2 w-full rounded-full dark:bg-white dark:text-black font-semibold text-sm py-3 "
               >
                 <StepForward strokeWidth={1.5} className="w-5 h-5" /> Resume
               </button>
@@ -231,7 +242,7 @@ export const TaskCard = ({
                 onClick={async () => {
                   await onAddProgress();
                 }}
-                className="flex items-center justify-center gap-2 w-full rounded-full dark:bg-white dark:text-black font-semibold text-sm py-3 mt-10"
+                className="flex items-center justify-center gap-2 w-full rounded-full dark:bg-white dark:text-black font-semibold text-sm py-3 "
               >
                 {loading ? (
                   <Spinner />
@@ -247,7 +258,7 @@ export const TaskCard = ({
         )}
         {task.status === "DONE" && (
           <div className="w-full">
-            <button className="flex items-center justify-center gap-2 w-full rounded-full dark:bg-white dark:text-black font-semibold text-sm py-3 mt-10">
+            <button className="flex items-center justify-center gap-2 w-full rounded-full dark:bg-white dark:text-black font-semibold text-sm py-3 ">
               <Check strokeWidth={1.5} className="w-5 h-5" /> Completed
             </button>
           </div>

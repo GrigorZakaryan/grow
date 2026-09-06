@@ -132,7 +132,7 @@ export const MenuBar = ({ className }: { className?: string }) => {
             height: active ? 200 : 56,
             borderRadius: active ? 30 : 30,
           }}
-          className={`flex-1 flex items-center justify-center w-full h-full bg-black/5 dark:bg-gray-300/10 border-b border-b-black/10 dark:border-b-white/10 border-l border-l-black/10 dark:border-l-white/10 border-t border-r border-t-black/10 dark:border-t-white/10 border-r-black/10 dark:border-r-white/10 backdrop-blur-2xl rounded-full shadow-lg ${active ? "p-3" : "p-1"}`}
+          className={`flex-1 flex items-center justify-center w-full h-full bg-black/5 border-b border-b-black/10 dark:border-b-white/10 border-l border-l-black/10 dark:border-l-white/10 border-t border-r border-t-black/10 dark:border-t-white/10 border-r-black/10 dark:border-r-white/10 backdrop-blur-2xl rounded-full shadow-lg ${active ? "p-3" : "p-1"}`}
         >
           {active ? (
             <div className="w-full h-full grid grid-cols-4 grid-rows-3 gap-3">

@@ -1,4 +1,3 @@
-import db from "@/lib/db";
 import { Header } from "./components/header";
 import { HomeTasks } from "./components/tasks";
 

@@ -8,6 +8,7 @@ import axios from "axios";
 import { Domain } from "@/lib/generated/prisma/client";
 import { Switch } from "@/components/ui/switch";
 import { Controller, useForm, useWatch } from "react-hook-form";
+import { useEffect } from "react";
 
 type TaskFormValues = {
   label: string;
@@ -16,7 +17,8 @@ type TaskFormValues = {
   deadline: string;
   frequency: "DAILY" | "WEEKLY" | "MONTHLY";
   countType: "QTY" | "TIME" | "CHECKBOX";
-  finalScore?: number;
+  finalQty?: number | null;
+  finalTimeMS?: number | null;
   priority: number;
   showCalendar: boolean;
   day: string;
@@ -25,15 +27,17 @@ type TaskFormValues = {
 };
 
 export const TasksForm = ({ domains }: { domains: Domain[] }) => {
-  const { openTask, setClose } = useTaskForm();
+  const { openTask, setClose, task } = useTaskForm();
   const { control, register, handleSubmit, reset } = useForm<TaskFormValues>({
     defaultValues: {
-      label: "",
+      label: task?.label,
       domainId: domains[0]?.id ?? "",
       type: "REPEATING",
       deadline: "",
       frequency: "DAILY",
       countType: "QTY",
+      finalQty: 0,
+      finalTimeMS: 0,
       priority: 0,
       showCalendar: false,
       day: "",
@@ -41,6 +45,29 @@ export const TasksForm = ({ domains }: { domains: Domain[] }) => {
       endTime: "",
     },
   });
+
+  useEffect(() => {
+    if (task) {
+      reset({
+        label: task.label ?? "",
+        domainId: task.domainId ?? domains[0]?.id ?? "",
+        type: task.type,
+        deadline: task.deadline
+          ? new Date(task.deadline).toISOString().slice(0, 16)
+          : "",
+        frequency: task.frequency ?? "DAILY",
+        countType: task.countType,
+        priority: task.priority,
+        showCalendar: task.day ? true : false,
+        day: task.day ?? "",
+        startTime: task.startTime ?? "",
+        endTime: task.endTime ?? "",
+        finalQty: task.finalQty,
+        finalTimeMS: Number(task.finalTimeMS) / 60_000,
+      });
+    }
+  }, [task, domains, reset]);
+
   const type = useWatch({ control, name: "type" });
   const countType = useWatch({ control, name: "countType" });
   const showCalendar = useWatch({ control, name: "showCalendar" });
@@ -54,15 +81,24 @@ export const TasksForm = ({ domains }: { domains: Domain[] }) => {
         frequency: values.frequency,
         countType: values.countType,
         // Map store values to the specific backend fields
-        finalQty: values.countType === "QTY" ? values.finalScore : null,
-        finalTimeMS: values.countType === "TIME" ? values.finalScore : null,
+        finalQty: values.countType === "QTY" ? values.finalQty : null,
+        finalTimeMS: values.countType === "TIME" ? values.finalTimeMS : null,
         priority: values.priority,
         day: values.day,
         startTime: values.startTime,
         endTime: values.endTime,
       };
 
-      await axios.post(`/individual/${values.domainId}/api/tasks`, payload);
+      if (task?.id) {
+        await axios.patch(
+          `/individual/${values.domainId}/${task.id}/api/edit`,
+          payload,
+        );
+        reset();
+      } else {
+        await axios.post(`/individual/${values.domainId}/api/tasks`, payload);
+        reset();
+      }
       reset();
       setClose();
     } catch (err) {
@@ -253,7 +289,7 @@ export const TasksForm = ({ domains }: { domains: Domain[] }) => {
                         Goal
                       </label>
                       <input
-                        {...register("finalScore", { valueAsNumber: true })}
+                        {...register("finalQty", { valueAsNumber: true })}
                         className="w-full text-right text-white focus:outline-none"
                         id="task-goal"
                         placeholder="e.g. 10 (times)"
@@ -270,7 +306,7 @@ export const TasksForm = ({ domains }: { domains: Domain[] }) => {
                         Goal
                       </label>
                       <input
-                        {...register("finalScore", { valueAsNumber: true })}
+                        {...register("finalTimeMS", { valueAsNumber: true })}
                         className="w-full text-right text-white focus:outline-none"
                         id="task-goal"
                         placeholder="e.g. 20 (minutes)"

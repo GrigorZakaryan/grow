@@ -4,7 +4,7 @@ import { create } from "zustand";
 type TaskFormState = {
   task: Task | null;
   openTask: boolean;
-  setTask: (task: Task) => void;
+  setTask: (task: Task | null) => void;
   setClose: () => void;
   setOpenTask: () => void;
 };

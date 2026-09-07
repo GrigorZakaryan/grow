@@ -61,3 +61,20 @@ export const PATCH = async (
     return new NextResponse("Something went wrong!", { status: 500 });
   }
 };
+
+export const DELETE = async (
+  _: any,
+  { params }: { params: Promise<{ domainId: string; taskId: string }> },
+) => {
+  const { taskId } = await params;
+  try {
+    await db.task.delete({
+      where: { id: taskId },
+    });
+
+    return new NextResponse("Task deleted!", { status: 200 });
+  } catch (err) {
+    console.error("[TASK DELETE]: ", err);
+    return new NextResponse("Something went wrong!", { status: 500 });
+  }
+};

@@ -2,13 +2,16 @@
 import { AnimatePresence, motion } from "motion/react";
 import { useTaskForm } from "../../stores/use-task-form";
 import { inter } from "../reflections/reflections-form";
-import { Check, X } from "lucide-react";
+import { Check, Trash, X } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import axios from "axios";
 import { Domain } from "@/lib/generated/prisma/client";
 import { Switch } from "@/components/ui/switch";
 import { Controller, useForm, useWatch } from "react-hook-form";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import { Spinner } from "@/components/ui/spinner";
 
 type TaskFormValues = {
   label: string;
@@ -27,7 +30,10 @@ type TaskFormValues = {
 };
 
 export const TasksForm = ({ domains }: { domains: Domain[] }) => {
-  const { openTask, setClose, task } = useTaskForm();
+  const { openTask, setClose, task, setTask } = useTaskForm();
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+
   const { control, register, handleSubmit, reset } = useForm<TaskFormValues>({
     defaultValues: {
       label: task?.label,
@@ -106,6 +112,19 @@ export const TasksForm = ({ domains }: { domains: Domain[] }) => {
     }
   };
 
+  const onDelete = async () => {
+    try {
+      setLoading(true);
+      await axios.delete(`/individual/${task?.domainId}/${task?.id}/api/edit`);
+      setClose();
+      router.refresh();
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="w-full h-dvh">
       <AnimatePresence>
@@ -121,7 +140,22 @@ export const TasksForm = ({ domains }: { domains: Domain[] }) => {
               <div
                 className="p-3 bg-white/10 rounded-full border border-white/15 active:bg-white/50 transition active:scale-150 duration-200"
                 onClick={() => {
-                  reset();
+                  reset({
+                    label: "",
+                    domainId: domains[0]?.id ?? "",
+                    type: "REPEATING",
+                    deadline: "",
+                    frequency: "DAILY",
+                    countType: "CHECKBOX",
+                    priority: 0,
+                    showCalendar: false,
+                    day: "",
+                    startTime: "",
+                    endTime: "",
+                    finalQty: null,
+                    finalTimeMS: null,
+                  });
+                  setTask(null);
                   setClose();
                 }}
               >
@@ -389,6 +423,25 @@ export const TasksForm = ({ domains }: { domains: Domain[] }) => {
                     </div>
                   )}
                 </div>
+                {task?.id && (
+                  <div className="w-full mt-6 pb-6">
+                    <Button
+                      disabled={loading}
+                      onClick={() => onDelete()}
+                      size={"lg"}
+                      className="w-full"
+                      variant={"destructive"}
+                    >
+                      {loading ? (
+                        <Spinner />
+                      ) : (
+                        <div className="flex items-center gap-1">
+                          <Trash /> Delete Task
+                        </div>
+                      )}
+                    </Button>
+                  </div>
+                )}
               </div>
             </div>
           </motion.div>

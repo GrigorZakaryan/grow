@@ -147,12 +147,13 @@ export const TimesCol = ({
                 {hourTasks.map((task) => (
                   <div
                     key={task.id}
-                    className={`absolute z-5 w-[50%] left-0 rounded-lg bg-blue-800 px-2 overflow-hidden border border-black`}
+                    className={`absolute z-5 w-[49%] left-0 rounded-lg bg-blue-800/20 px-3 overflow-hidden border border-black`}
                     style={{
                       top: `${task.top}%`,
                       height: `${task.height}%`,
                     }}
                   >
+                    <div className="absolute w-1 h-full bg-blue-800 rounded-l-full left-0" />
                     <h6 className="text-xs font-medium">{task.label}</h6>
                   </div>
                 ))}
@@ -161,12 +162,13 @@ export const TimesCol = ({
                 {hourActivity.map((activity) => (
                   <div
                     key={activity.id}
-                    className={`absolute z-5 w-[50%] right-0 rounded-lg px-2 bg-[#d81159] overflow-hidden border border-black`}
+                    className={`absolute z-5 w-[49%] right-0 rounded-lg bg-[#d81159]/20 px-3 overflow-hidden border border-black`}
                     style={{
                       top: `${activity.top}%`,
                       height: `${activity.height}%`,
                     }}
                   >
+                    <div className="absolute w-1 h-full bg-[#d81159] rounded-l-full left-0" />
                     <h6 className="text-xs font-medium">
                       {activity.task?.label}
                     </h6>

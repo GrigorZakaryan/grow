@@ -202,7 +202,7 @@ export const MenuBar = ({ className }: { className?: string }) => {
             scale: 1.3,
             backgroundColor: "rgba(255, 255, 255, 0.25)",
           }}
-          className="flex items-center justify-center w-14 h-14 rounded-full bg-black/5 dark:bg-gray-300/10 border-b border-b-black/10 dark:border-b-white/10 border-l border-l-black/10 dark:border-l-white/10 border-t border-r border-t-black/10 dark:border-t-white/10 border-r-black/10 dark:border-r-white/10 backdrop-blur-2xl shadow-lg"
+          className="flex items-center justify-center w-14 h-14 rounded-full bg-black/5 border-b border-b-black/10 dark:border-b-white/10 border-l border-l-black/10 dark:border-l-white/10 border-t border-r border-t-black/10 dark:border-t-white/10 border-r-black/10 dark:border-r-white/10 backdrop-blur-2xl shadow-lg"
         >
           <Plus />
         </motion.div>

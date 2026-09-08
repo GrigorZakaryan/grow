@@ -10,7 +10,10 @@ export default async function DomainPage({
   params: Promise<{ domainId: string }>;
 }) {
   const { domainId } = await params;
-  const domain = await db.domain.findUnique({ where: { id: domainId } });
+  const domain = await db.domain.findUnique({
+    where: { id: domainId },
+    include: { tasks: { include: { activity: true } } },
+  });
   if (!domain?.id) {
     redirect("/domains");
   }

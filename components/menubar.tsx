@@ -14,6 +14,7 @@ import {
   Home,
   Layers,
   LayersPlus,
+  Logs,
   NotebookPen,
   Plus,
   Settings,
@@ -22,6 +23,7 @@ import {
 import { useTimer } from "./modals/stores/use-timer-store";
 import { useDomainForm } from "@/app/(routes)/domains/stores/use-domain-form";
 import { useTaskForm } from "@/app/(routes)/individual/[domainId]/stores/use-task-form";
+import { useActivity } from "@/app/(routes)/individual/[domainId]/stores/use-activity-store";
 
 const list = [
   {
@@ -56,6 +58,7 @@ export const MenuBar = ({ className }: { className?: string }) => {
   const { toggleOpen, open } = useTimer();
   const { setOpen } = useDomainForm();
   const { setOpenTask } = useTaskForm();
+  const { setOpenActivity } = useActivity();
 
   const activeList = [
     {
@@ -84,6 +87,13 @@ export const MenuBar = ({ className }: { className?: string }) => {
       key: "timer",
       index: 3,
       action: () => toggleOpen(),
+    },
+    {
+      icon: <Logs className="w-6 h-6" />,
+      label: "Activity",
+      key: "activity",
+      index: 3,
+      action: () => setOpenActivity(),
     },
   ];
 

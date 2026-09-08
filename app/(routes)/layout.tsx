@@ -5,6 +5,7 @@ import { Timer } from "@/components/modals/timer";
 import { ReflectionsForm } from "./individual/[domainId]/components/reflections/reflections-form";
 import { TasksForm } from "./individual/[domainId]/components/tasks/tasks-form";
 import db from "@/lib/db";
+import { ActivityForm } from "@/components/activity/activity-form";
 
 export default async function RoutesLayout({
   children,
@@ -12,6 +13,7 @@ export default async function RoutesLayout({
   children: React.ReactNode;
 }) {
   const domains = await db.domain.findMany();
+  const tasks = await db.task.findMany();
   return (
     <div className="relative w-full h-dvh overflow-hidden">
       {children}
@@ -21,6 +23,7 @@ export default async function RoutesLayout({
         <Timer key={"timer"} />
         <ReflectionsForm key={"reflections-form"} />
         <TasksForm domains={domains} key={"tasks-form"} />
+        <ActivityForm tasks={tasks} />
       </AnimatePresence>
     </div>
   );

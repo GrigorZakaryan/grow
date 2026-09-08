@@ -5,6 +5,8 @@ import { format } from "date-fns";
 import { Task } from "@/lib/generated/prisma/client";
 import { generateTime } from "../utils/generateDates";
 import { useSelectDay } from "../store/useSelectDay";
+import { useTaskForm } from "../../individual/[domainId]/stores/use-task-form";
+import { useActivity } from "../../individual/[domainId]/stores/use-activity-store";
 
 interface ActivityProps {
   id: string;
@@ -24,6 +26,8 @@ export const TimesCol = ({
   const times = generateTime();
   const [currentDate, setCurrentDate] = useState<Date | null>(null);
   const { selectedDay } = useSelectDay();
+  const { setTask } = useTaskForm();
+  const { setActivity } = useActivity();
 
   useEffect(() => {
     const updateTime = () => {
@@ -146,6 +150,7 @@ export const TimesCol = ({
                 {/* Tasks */}
                 {hourTasks.map((task) => (
                   <div
+                    onClick={() => setTask(task)}
                     key={task.id}
                     className={`absolute z-5 w-[49%] left-0 rounded-lg bg-blue-800/20 px-3 overflow-hidden border border-black`}
                     style={{
@@ -161,6 +166,7 @@ export const TimesCol = ({
                 {/* Activites */}
                 {hourActivity.map((activity) => (
                   <div
+                    onClick={() => setActivity(activity)}
                     key={activity.id}
                     className={`absolute z-5 w-[49%] right-0 rounded-lg bg-[#d81159]/20 px-3 overflow-hidden border border-black`}
                     style={{

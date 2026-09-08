@@ -76,6 +76,7 @@ export const GET = async (req: NextRequest) => {
       orderBy: {
         startTime: "asc",
       },
+      include: { domain: true },
     });
 
     return NextResponse.json(tasks);

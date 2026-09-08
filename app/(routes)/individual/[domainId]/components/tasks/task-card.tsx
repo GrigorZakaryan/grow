@@ -12,6 +12,7 @@ import {
   CircleCheck,
   CircleDashed,
   CirclePlus,
+  Clock,
   Edit,
   Loader,
   PlayCircle,
@@ -20,12 +21,13 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { useTaskForm } from "../../stores/use-task-form";
+import { TaskProps } from "@/app/(routes)/home/components/tasks";
 
 export const TaskCard = ({
   task,
   onTaskUpdate,
 }: {
-  task: Task;
+  task: TaskProps;
   onTaskUpdate: () => Promise<void>;
 }) => {
   // Use let variables or a helper function to set values
@@ -111,24 +113,16 @@ export const TaskCard = ({
         <div className="flex items-center justify-between w-full">
           <div className="w-full max-w-[60%] overflow-x-hidden">
             <div className="flex flex-col items-start gap-1 w-full">
-              <h1 className="font-semibold">{task.label}</h1>
               <p className="text-xs text-black/60 dark:text-white/60 capitalize">
-                {task.type === "ONE_TIME" ? "one-time" : "repeating"}
+                {task.domain.label}
               </p>
+              <h1 className="font-semibold">{task.label}</h1>
             </div>
             <Separator className="my-3" />
             <div className="flex items-center gap-2 h-full">
               <div className="flex items-center gap-2 text-black/60 dark:text-white/60">
-                {task.deadline ? (
-                  <CalendarDays className="w-3 h-3" />
-                ) : (
-                  <Repeat className="w-3 h-3" />
-                )}
-                <p className="text-xs capitalize">
-                  {task.deadline
-                    ? format(new Date(task.deadline), "EE dd MMM HH:mm")
-                    : task.frequency?.toLocaleLowerCase()}
-                </p>
+                <Clock className="w-3 h-3" />
+                <p className="text-xs capitalize">{task.startTime}</p>
               </div>
               <Separator orientation="vertical" />
               <div className="flex items-center gap-2 text-black/60 dark:text-white/60">
@@ -220,7 +214,15 @@ export const TaskCard = ({
           </div>
         )}
         {task.status === "IN_PROGRESS" && (
-          <div className="w-full">
+          <div className="w-full flex items-center justify-center gap-2 mt-10">
+            <button
+              onClick={() => {
+                setTask(task);
+              }}
+              className="h-full py-3 px-3 rounded-full bg-white/10 border"
+            >
+              <Edit className="w-5 h-5" />
+            </button>
             {task.countType === "TIME" && (
               <button
                 onClick={() => {
@@ -257,7 +259,15 @@ export const TaskCard = ({
           </div>
         )}
         {task.status === "DONE" && (
-          <div className="w-full">
+          <div className="w-full flex items-center justify-center gap-2 mt-10">
+            <button
+              onClick={() => {
+                setTask(task);
+              }}
+              className="h-full py-3 px-3 rounded-full bg-white/10 border"
+            >
+              <Edit className="w-5 h-5" />
+            </button>
             <button className="flex items-center justify-center gap-2 w-full rounded-full dark:bg-white dark:text-black font-semibold text-sm py-3 ">
               <Check strokeWidth={1.5} className="w-5 h-5" /> Completed
             </button>

@@ -4,9 +4,10 @@ import axios from "axios";
 import { Domain, Task } from "@/lib/generated/prisma/client";
 import { AddTask } from "./add-task";
 import { TaskCard } from "./task-card";
+import { TaskProps } from "@/app/(routes)/home/components/tasks";
 
 export const Tasks = ({ domain }: { domain: Domain }) => {
-  const [tasks, setTasks] = useState<Task[]>([]);
+  const [tasks, setTasks] = useState<TaskProps[]>([]);
   const [loading, setLoading] = useState(true);
 
   const fetchTasks = async () => {

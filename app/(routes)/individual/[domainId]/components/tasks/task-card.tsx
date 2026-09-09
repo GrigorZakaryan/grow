@@ -107,7 +107,7 @@ export const TaskCard = ({
 
   return (
     <div
-      className={`flex min-w-full rounded-2xl bg-muted dark:bg-gray-300/10 p-4 border border-white/10 ${task.status === "DONE" ? "opacity-70" : "shadow-inner shadow-white/10"}`}
+      className={`flex min-w-full rounded-2xl bg-muted dark:bg-gray-300/10 p-4 border ${task.status === "DONE" ? "opacity-70" : ""}`}
     >
       <div className="flex flex-col items-center justify-between w-full">
         <div className="flex items-center justify-between w-full">

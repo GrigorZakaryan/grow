@@ -61,12 +61,6 @@ export const HomeTasks = () => {
 
   return (
     <div className="mt-10">
-      <div className="flex items-center justify-between">
-        <h2 className="text-xl">Tasks</h2>
-        <div>
-          <p className="text-sm opacity-70">{tasks.length} Remaining</p>
-        </div>
-      </div>
       <div className="flex items-center gap-5 mt-4 w-full overflow-y-hidden overflow-x-auto">
         {tasks &&
           tasks.map((task) => (

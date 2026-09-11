@@ -1,5 +1,4 @@
 "use client";
-import { TaskCard } from "@/app/(routes)/individual/[domainId]/components/tasks/task-card";
 import {
   Domain,
   TaskCountType,
@@ -9,6 +8,7 @@ import {
 } from "@/lib/generated/prisma/client";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { TaskCard } from "./task-card";
 
 export type TaskProps = {
   id: string;
@@ -60,15 +60,13 @@ export const HomeTasks = () => {
   }, []);
 
   return (
-    <div className="mt-10">
-      <div className="flex items-center gap-5 mt-4 w-full overflow-y-hidden overflow-x-auto">
+    <div className="w-full mt-5">
+      <div className="flex items-center gap-3 mt-4 w-full overflow-y-hidden overflow-x-auto px-5">
         {tasks &&
           tasks.map((task) => (
             <TaskCard onTaskUpdate={fetchTasks} task={task} key={task.id} />
           ))}
-        {loading && (
-          <div className="flex min-w-full rounded-2xl bg-muted min-h-50"></div>
-        )}
+        {loading && <div className="flex  rounded-2xl bg-muted min-h-50"></div>}
       </div>
     </div>
   );

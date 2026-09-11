@@ -34,11 +34,10 @@ export default function Home() {
   }[daytime];
 
   return (
-    <div className={`w-full h-full px-5 py-2 ${background}`}>
-      <Header />
-
-      <div className="w-full h-full overflow-y-scroll pb-40 mt-5">
-        <h1 className="text-3xl font-semibold">
+    <div className={`w-full h-full py-2 ${background}`}>
+      <div className="w-full h-full overflow-y-scroll pb-40 ">
+        <Header />
+        <h1 className="text-3xl font-semibold ml-5 mt-5">
           Good {greeting}, <br />
           Grigor Zakaryan!
         </h1>
@@ -46,7 +45,6 @@ export default function Home() {
         <div className="flex items-center w-full mt-10">
           <QuickActions />
         </div>
-
         <HomeTasks />
       </div>
     </div>

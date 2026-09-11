@@ -48,7 +48,7 @@ export const QuickActions = () => {
     },
   ];
   return (
-    <div className="flex items-center gap-3 w-full overflow-x-auto">
+    <div className="flex items-center gap-3 w-full overflow-x-auto px-5">
       {activeList.map((item) => (
         <div
           onClick={item.action}

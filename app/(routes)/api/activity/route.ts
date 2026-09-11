@@ -70,3 +70,31 @@ export const POST = async (req: NextRequest) => {
     return new NextResponse("Something went wrong!", { status: 500 });
   }
 };
+
+export async function GET(req: NextRequest) {
+  const days = Number(req.nextUrl.searchParams.get("days") ?? 7);
+  const taskId = req.nextUrl.searchParams.get("taskId");
+
+  const now = new Date();
+
+  const startDate = new Date(now);
+  startDate.setDate(now.getDate() - (days - 1));
+
+  // Start from midnight
+  startDate.setHours(0, 0, 0, 0);
+
+  const activities = await db.activity.findMany({
+    where: {
+      taskId,
+      date: {
+        gte: startDate,
+        lte: now,
+      },
+    },
+    orderBy: {
+      date: "asc",
+    },
+  });
+
+  return NextResponse.json(activities);
+}

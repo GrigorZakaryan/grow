@@ -32,6 +32,7 @@ export type TaskProps = {
   createdAt: Date;
   updatedAt: Date;
   lastResetAt: Date | null;
+  showOnCalendar: boolean;
   domain: Domain;
 };
 

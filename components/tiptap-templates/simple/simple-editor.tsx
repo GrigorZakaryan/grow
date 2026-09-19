@@ -220,7 +220,7 @@ export function SimpleEditor({ domainId }: { domainId: string }) {
   const onSave = async () => {
     try {
       setState("saving");
-      await axios.patch(`/individual/${domainId}/api/reflections`, {
+      await axios.patch(`/individual/api/reflections`, {
         content: debouncedInput,
         docId: docId,
       });
@@ -289,7 +289,7 @@ export function SimpleEditor({ domainId }: { domainId: string }) {
   }, [isMobile, mobileView]);
 
   return (
-    <div className="simple-editor-wrapper">
+    <div className="simple-editor-wrapper z-99">
       <EditorContext.Provider value={{ editor }}>
         <Toolbar
           ref={toolbarRef}

@@ -23,7 +23,7 @@ export const ReflectionsForm = () => {
             animate={{ y: 0 }}
             transition={{ duration: 0.2 }}
             exit={{ y: "100%" }}
-            className={`${inter.className} fixed ${openEditor ? "bottom-0" : "bottom-[-100vh]"} w-full h-full bg-[#1e1e1e] z-30 rounded-t-4xl`}
+            className={`${inter.className} fixed ${openEditor ? "bottom-0" : "bottom-[-100vh]"} w-full h-full bg-[#1e1e1e] z-50 rounded-t-4xl`}
           >
             <div
               className="flex items-center justify-between w-full p-5"
@@ -39,6 +39,7 @@ export const ReflectionsForm = () => {
               </div>
               <div
                 onClick={() => {
+                  setClose();
                   router.refresh();
                   router.push("#journal");
                 }}

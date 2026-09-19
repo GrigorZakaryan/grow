@@ -22,8 +22,8 @@ model Relfection {
   id       String @id @default(uuid())
   content  Json
   title    String
-  domainId String
-  domain   Domain @relation(fields: [domainId], references: [id])
+  domainId String?
+  domain   Domain? @relation(fields: [domainId], references: [id])
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt

@@ -17,7 +17,7 @@ export default async function RoutesLayout({
   return (
     <div className="relative w-full h-dvh overflow-hidden">
       {children}
-      <MenuBar className="absolute bottom-7 transform translate-x-[-50%] left-[50%] z-99" />
+      <MenuBar className="absolute bottom-7 transform translate-x-[-50%] left-[50%] z-50" />
       <AnimatePresence>
         <DomainForm key={"domain-form"} />
         <Timer key={"timer"} />

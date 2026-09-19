@@ -95,11 +95,11 @@ export const ReflectionCard = ({ r }: { r: Relfection }) => {
         setContent(JSON.parse(JSON.stringify(r.content)));
         setOpenEditor();
       }}
-      className="w-full rounded-2xl bg-[#1e1e1e] text-white p-4 border border-white/5"
+      className="w-full min-w-60 max-w-100 min-h-48 rounded-2xl bg-[#1e1e1e] text-white p-4 border border-white/5"
     >
       <div className="w-full">
         <div className="flex flex-col items-center gap-2 w-full">
-          <div className="flex flex-col w-full max-w-xs max-h-45 overflow-y-hidden relative ">
+          <div className="flex flex-col w-full max-w-xs h-40 overflow-y-hidden relative ">
             <EditorContent disabled={true} editor={editor} />
             <div className="w-full h-full absolute inset-0 bg-transparent z-10" />
             <div className="absolute w-full h-10 bg-linear-to-b from-transparent to-[#1e1e1e] bottom-0 z-20" />

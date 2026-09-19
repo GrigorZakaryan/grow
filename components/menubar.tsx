@@ -24,6 +24,8 @@ import { useTimer } from "./modals/stores/use-timer-store";
 import { useDomainForm } from "@/app/(routes)/domains/stores/use-domain-form";
 import { useTaskForm } from "@/app/(routes)/individual/[domainId]/stores/use-task-form";
 import { useActivity } from "@/app/(routes)/individual/[domainId]/stores/use-activity-store";
+import { useEditorStore } from "@/app/(routes)/individual/[domainId]/stores/use-editor";
+import axios from "axios";
 
 const list = [
   {
@@ -59,6 +61,17 @@ export const MenuBar = ({ className }: { className?: string }) => {
   const { setOpen } = useDomainForm();
   const { setOpenTask } = useTaskForm();
   const { setOpenActivity } = useActivity();
+  const { setOpenEditor, setDocId } = useEditorStore();
+
+  const onJournalOpen = async () => {
+    try {
+      const res = await axios.post("/individual/api/reflections");
+      setDocId(res.data.id);
+      setOpenEditor();
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   const activeList = [
     {
@@ -66,6 +79,7 @@ export const MenuBar = ({ className }: { className?: string }) => {
       label: "Journal",
       key: "journal",
       index: 0,
+      action: () => onJournalOpen(),
     },
     {
       icon: <LayersPlus className="w-6 h-6" />,
@@ -160,7 +174,7 @@ export const MenuBar = ({ className }: { className?: string }) => {
             <motion.div
               layout
               ref={containerRef}
-              className="relative w-full grid grid-cols-4 items-center justify-items-center z-50 h-12"
+              className="relative w-full grid grid-cols-4 items-center justify-items-center z-11 h-12"
             >
               {/* Navigation Buttons */}
               {list.map((item, index) => (

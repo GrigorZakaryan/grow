@@ -1,6 +1,7 @@
 "use client";
 
 import { Header } from "./components/header";
+import { HomeReflections } from "./components/home-reflections";
 import { QuickActions } from "./components/qucik-actions";
 import { HomeTasks } from "./components/tasks";
 
@@ -46,6 +47,7 @@ export default function Home() {
           <QuickActions />
         </div>
         <HomeTasks />
+        <HomeReflections />
       </div>
     </div>
   );

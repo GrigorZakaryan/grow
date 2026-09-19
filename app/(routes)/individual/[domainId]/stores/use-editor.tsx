@@ -23,7 +23,7 @@ export const useEditorStore = create<EditorProps>((set) => ({
   setDocId: (id: string) => set(() => ({ docId: id })),
   setState: (s) => set(() => ({ state: s })),
   setDomainId: (id: string) => set((e) => ({ domainId: id })),
-  setClose: () => set(() => ({ open: false, content: null })),
+  setClose: () => set(() => ({ openEditor: false, content: null })),
   setOpenEditor: () => set(() => ({ openEditor: true })),
   setContent: (ct) => set(() => ({ content: ct })),
 }));

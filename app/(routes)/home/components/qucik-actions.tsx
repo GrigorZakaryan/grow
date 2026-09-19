@@ -4,33 +4,47 @@ import { FilePlus, LayersPlus, Logs, NotebookPen, Timer } from "lucide-react";
 import { useDomainForm } from "../../domains/stores/use-domain-form";
 import { useTaskForm } from "../../individual/[domainId]/stores/use-task-form";
 import { useActivity } from "../../individual/[domainId]/stores/use-activity-store";
+import { useEditorStore } from "../../individual/[domainId]/stores/use-editor";
+import axios from "axios";
 
 export const QuickActions = () => {
   const { toggleOpen, open } = useTimer();
   const { setOpen } = useDomainForm();
   const { setOpenTask } = useTaskForm();
   const { setOpenActivity } = useActivity();
+  const { setOpenEditor, setDocId } = useEditorStore();
+
+  const onJournalOpen = async () => {
+    try {
+      const res = await axios.post("/individual/api/reflections");
+      setDocId(res.data.id);
+      setOpenEditor();
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   const activeList = [
     {
       icon: <FilePlus className="w-5 h-5 text-green-300" />,
       label: "Add Task",
       key: "task",
-      index: 2,
+      index: 0,
       action: () => setOpenTask(),
     },
     {
       icon: <Logs className="w-5 h-5 text-blue-300" />,
       label: "Log Activity",
       key: "activity",
-      index: 4,
+      index: 1,
       action: () => setOpenActivity(),
     },
     {
       icon: <NotebookPen className="w-5 h-5 text-violet-300" />,
       label: "New Journal",
       key: "journal",
-      index: 0,
+      index: 2,
+      action: () => onJournalOpen(),
     },
     {
       icon: <Timer className="w-5 h-5 text-yellow-300" />,
@@ -43,7 +57,7 @@ export const QuickActions = () => {
       icon: <LayersPlus className="w-5 h-5 text-red-300" />,
       label: "Add Domain",
       key: "domain",
-      index: 1,
+      index: 4,
       action: () => setOpen(),
     },
   ];

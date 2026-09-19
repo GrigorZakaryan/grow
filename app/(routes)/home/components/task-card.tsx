@@ -1,12 +1,25 @@
 "use client";
 
-import { ChevronRight, Clock } from "lucide-react";
+import {
+  Check,
+  ChevronRight,
+  CircleCheck,
+  CirclePlus,
+  Clock,
+  Edit,
+  PlayCircle,
+  StepForward,
+} from "lucide-react";
 import { TaskProps } from "./tasks";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import { Activity } from "@/lib/generated/prisma/client";
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis } from "recharts";
+import { Spinner } from "@/components/ui/spinner";
+import { useTimer } from "@/components/modals/stores/use-timer-store";
+import { useTaskForm } from "../../individual/[domainId]/stores/use-task-form";
+import axios from "axios";
 
 export const TaskCard = ({
   task,
@@ -16,6 +29,38 @@ export const TaskCard = ({
   onTaskUpdate: () => Promise<void>;
 }) => {
   const [activities, setActivities] = useState<Activity[]>([]);
+  const { setTime, toggleOpen, setTaskId, setDomainId, taskId, time } =
+    useTimer();
+  const [loading, setLoading] = useState(false);
+  const { setTask } = useTaskForm();
+
+  const onCheck = async () => {
+    try {
+      setLoading(true);
+      await axios.patch(`/individual/${task.domainId}/${task.id}/api`, {
+        checked: true,
+      });
+      await onTaskUpdate();
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const onAddProgress = async () => {
+    try {
+      setLoading(true);
+      await axios.patch(`/individual/${task.domainId}/${task.id}/api`, {
+        qty: 1,
+      });
+      await onTaskUpdate();
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     fetch(`/api/activity?days=7&taskId=${task.id}`)
@@ -47,7 +92,7 @@ export const TaskCard = ({
   });
 
   return (
-    <div className="flex flex-col items-start bg-[#1e1e1e] text-white h-full rounded-3xl border min-w-80">
+    <div className="flex flex-col items-start bg-[#1e1e1e] text-white rounded-3xl border min-w-80 w-full max-w-100">
       <div className="px-5 py-3 w-full">
         {/* Header */}
         <div className="w-full flex items-center justify-between">
@@ -134,14 +179,122 @@ export const TaskCard = ({
         </div>
 
         {/* Buttons */}
-        <div className="flex items-center gap-2 mt-6 w-full">
-          <Button
-            className="w-full flex-1 rounded-full"
-            variant="default"
-            size="lg"
-          >
-            Complete
-          </Button>
+        <div className="flex items-center gap-2 mt-6 w-full flex-1">
+          {task.status === "UPCOMING" && (
+            <div className="w-full flex-1 min-w-[50%]">
+              {task.countType === "TIME" && (
+                <Button
+                  onClick={() => {
+                    if (task.countType === "TIME" && task.finalTimeMS) {
+                      setTime(task.finalTimeMS);
+                      setTaskId(task.id);
+                      setDomainId(task.domainId);
+                      toggleOpen();
+                    }
+                  }}
+                  className="w-full flex-1 rounded-full"
+                  variant="default"
+                  size="lg"
+                >
+                  <PlayCircle strokeWidth={1.5} className="w-5 h-5" /> Get
+                  Started
+                </Button>
+              )}
+              {task.countType === "CHECKBOX" && (
+                <Button
+                  disabled={loading}
+                  onClick={async () => {
+                    await onCheck();
+                  }}
+                  className="w-full flex-1 rounded-full"
+                  variant="default"
+                  size="lg"
+                >
+                  {loading ? (
+                    <Spinner />
+                  ) : (
+                    <div className="flex items-center gap-2">
+                      <CircleCheck strokeWidth={1.5} className="w-5 h-5" />
+                      Complete
+                    </div>
+                  )}
+                </Button>
+              )}
+              {task.countType === "QTY" && (
+                <Button
+                  disabled={loading}
+                  onClick={async () => {
+                    await onAddProgress();
+                  }}
+                  className={`w-full flex-1 rounded-full ${loading && "opacity-80"}`}
+                  variant="default"
+                  size="lg"
+                >
+                  {loading ? (
+                    <Spinner />
+                  ) : (
+                    <div className="flex items-center gap-2">
+                      <CirclePlus strokeWidth={1.5} className="w-5 h-5" /> Add
+                      Progress
+                    </div>
+                  )}
+                </Button>
+              )}
+            </div>
+          )}
+          {task.status === "IN_PROGRESS" && (
+            <div className="w-full flex-1 items-center justify-center gap-2">
+              {task.countType === "TIME" && (
+                <Button
+                  onClick={() => {
+                    if (task.countType === "TIME" && task.finalTimeMS) {
+                      setTime(task.finalTimeMS - (task.timeMS ?? 0));
+                      setTaskId(task.id);
+                      setDomainId(task.domainId);
+                      toggleOpen();
+                    }
+                  }}
+                  className="w-full flex-1 rounded-full"
+                  variant="default"
+                  size="lg"
+                >
+                  <StepForward strokeWidth={1.5} className="w-5 h-5" /> Resume
+                </Button>
+              )}
+              {task.countType === "QTY" && (
+                <Button
+                  disabled={loading}
+                  onClick={async () => {
+                    await onAddProgress();
+                  }}
+                  className="w-full flex-1 rounded-full"
+                  variant="default"
+                  size="lg"
+                >
+                  {loading ? (
+                    <Spinner />
+                  ) : (
+                    <div className="flex items-center gap-2">
+                      <CirclePlus strokeWidth={1.5} className="w-5 h-5" /> Add
+                      Progress
+                    </div>
+                  )}
+                </Button>
+              )}
+            </div>
+          )}
+          {task.status === "DONE" && (
+            <div className="w-full flex-1 items-center justify-center gap-2 opacity-050">
+              <Button
+                disabled={true}
+                className="w-full rounded-full"
+                variant="default"
+                size="lg"
+              >
+                Completed
+              </Button>
+            </div>
+          )}
 
           <Button
             className="w-full flex-1 rounded-full"

@@ -1,10 +1,9 @@
 "use client";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Domain, Task } from "@/lib/generated/prisma/client";
-import { AddTask } from "./add-task";
-import { TaskCard } from "./task-card";
+import { Domain } from "@/lib/generated/prisma/client";
 import { TaskProps } from "@/app/(routes)/home/components/tasks";
+import { TaskCard } from "@/app/(routes)/home/components/task-card";
 
 export const Tasks = ({ domain }: { domain: Domain }) => {
   const [tasks, setTasks] = useState<TaskProps[]>([]);

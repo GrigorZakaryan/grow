@@ -38,6 +38,7 @@ enum TaskStatus {
   UPCOMING
   IN_PROGRESS
   DONE
+  DISMISSED
 }
 
 enum TaskCountType {
@@ -74,6 +75,8 @@ model Task {
   
   domainId String
   domain   Domain @relation(fields: [domainId], references: [id])
+
+  showOnCalendar  Boolean @default(false)
 
   day           String?
   startTime     String?

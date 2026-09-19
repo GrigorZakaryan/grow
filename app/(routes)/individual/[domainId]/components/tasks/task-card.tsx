@@ -113,9 +113,6 @@ export const TaskCard = ({
         <div className="flex items-center justify-between w-full">
           <div className="w-full max-w-[60%] overflow-x-hidden">
             <div className="flex flex-col items-start gap-1 w-full">
-              <p className="text-xs text-black/60 dark:text-white/60 capitalize">
-                {task.domain.label}
-              </p>
               <h1 className="font-semibold">{task.label}</h1>
             </div>
             <Separator className="my-3" />

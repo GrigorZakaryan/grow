@@ -70,7 +70,7 @@ export const GET = async (req: NextRequest) => {
     const tasks = await db.task.findMany({
       where: {
         status: {
-          in: ["UPCOMING", "IN_PROGRESS", "DONE"],
+          in: ["UPCOMING", "IN_PROGRESS"],
         },
         frequency: {
           in: ["DAILY"],

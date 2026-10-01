@@ -14,14 +14,50 @@ export default async function DomainPage({
     where: { id: domainId },
     include: { tasks: { include: { activity: true } } },
   });
+
   if (!domain?.id) {
     redirect("/domains");
   }
+
+  const now = new Date();
+
+  const lastWeek = new Date();
+  lastWeek.setDate(now.getDate() - 7);
+
+  const tasks = await db.task.findMany({
+    where: { domainId },
+    include: {
+      activity: {
+        where: {
+          date: { gte: lastWeek, lt: now },
+        },
+      },
+    },
+  });
+
+  const weekTotalPlannedScore = tasks.reduce(
+    (acc, curr) => Number(acc) + Number(curr.finalTimeMS),
+    0,
+  );
+
+  const weekTotalCompletedScore = tasks.reduce(
+    (acc, curr) =>
+      acc +
+      curr.activity.reduce(
+        (acc, curr) => Number(acc) + Number(curr.duration),
+        0,
+      ),
+    0,
+  );
+
   return (
     <div className="flex flex-col w-full h-dvh overflow-hidden relative">
       <DomainHeader domain={domain} />
       <div className="flex-1 flex w-full h-full overflow-x-auto overflow-y-hidden snap-x snap-mandatory touch-pan-x scrollbar-hide scroll-smooth">
-        <div className="min-w-full snap-center px-5 pt-5 shrink-0"></div>
+        <div className="min-w-full snap-center px-5 pt-5 shrink-0">
+          {weekTotalPlannedScore * 7}/{weekTotalCompletedScore}-
+          {(weekTotalCompletedScore / (weekTotalPlannedScore * 7)) * 100}
+        </div>
         <Tasks domain={domain} />
         <Relfections domain={domain} />
       </div>

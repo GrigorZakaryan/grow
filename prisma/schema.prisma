@@ -94,6 +94,8 @@ model Activity {
 
   date          DateTime  @default(now())
   duration      Int?
+  checked       Boolean?
+  qty           Int?
 
   taskId        String?
   task          Task?  @relation(fields: [taskId], references: [id])

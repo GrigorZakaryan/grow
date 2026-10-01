@@ -12,6 +12,8 @@ interface ActivityProps {
   id: string;
   date: Date;
   duration: number | null;
+  checked: boolean | null;
+  qty: number | null;
   taskId: string | null;
   task: Task | null;
 }

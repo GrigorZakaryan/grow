@@ -16,6 +16,14 @@ export const PATCH = async (
 
   let updateData = {};
 
+  if (body.status === "DISMISSED") {
+    await db.task.update({
+      where: { id: task.id },
+      data: { status: body.status },
+    });
+    return new NextResponse("Updated Task Status!", { status: 200 });
+  }
+
   // Handle specific logic based on countType
   switch (task.countType) {
     case "CHECKBOX":
@@ -68,6 +76,8 @@ export const PATCH = async (
     data: {
       taskId,
       duration: body.time,
+      checked: body.checked,
+      qty: body.qty,
       date: new Date(Date.now() - (body.time ?? 600000)),
     },
   });

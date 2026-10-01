@@ -95,7 +95,7 @@ export const ReflectionCard = ({ r }: { r: Relfection }) => {
         setContent(JSON.parse(JSON.stringify(r.content)));
         setOpenEditor();
       }}
-      className="w-full min-w-60 max-w-100 min-h-48 rounded-2xl bg-[#1e1e1e] text-white p-4 border border-white/5"
+      className="w-full min-w-60 max-w-100 min-h-48 rounded-2xl bg-[#1e1e1e] text-white p-4 border-white/5"
     >
       <div className="w-full">
         <div className="flex flex-col items-center gap-2 w-full">

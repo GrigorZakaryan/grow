@@ -220,7 +220,7 @@ export const TaskCard = ({
                   <span className="text-xs text-white/60">STREAK</span>
                   <div>
                     <h1 className="font-bold text-lg">
-                      X{" "}
+                      {task.streakDays}{" "}
                       <span className="text-sm font-normal text-white/60">
                         Days
                       </span>

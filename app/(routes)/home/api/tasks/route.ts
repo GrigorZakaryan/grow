@@ -27,11 +27,39 @@ export const GET = async (req: NextRequest) => {
 
     const now = new Date();
 
-    // Today's date in the user's timezone
     const today = formatInTimeZone(now, timeZone, "yyyy-MM-dd");
 
-    // Midnight at the beginning of today in the user's timezone
     const startOfToday = fromZonedTime(`${today} 00:00:00`, timeZone);
+
+    const startOfYesterday = new Date(startOfToday);
+    startOfYesterday.setUTCDate(startOfYesterday.getUTCDate() - 1);
+
+    const checkboxTasks = await db.task.findMany({
+      where: {
+        countType: "CHECKBOX",
+      },
+      include: {
+        activity: {
+          where: {
+            date: {
+              gte: startOfYesterday,
+              lt: startOfToday,
+            },
+          },
+        },
+      },
+    });
+
+    await Promise.all(
+      checkboxTasks.map(async (task) => {
+        if (task.activity.length === 0) {
+          await db.task.update({
+            where: { id: task.id },
+            data: { streakDays: 0 },
+          });
+        }
+      }),
+    );
 
     /*
      * Reset repeating tasks that haven't been reset today.

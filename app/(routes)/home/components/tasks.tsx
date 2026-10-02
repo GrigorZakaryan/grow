@@ -33,6 +33,7 @@ export type TaskProps = {
   updatedAt: Date;
   lastResetAt: Date | null;
   showOnCalendar: boolean;
+  streakDays: number | null;
   domain: Domain;
 };
 

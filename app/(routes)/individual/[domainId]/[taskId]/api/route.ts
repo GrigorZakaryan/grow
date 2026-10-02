@@ -32,7 +32,11 @@ export const PATCH = async (
           status: 400,
         });
       }
-      updateData = { checked: body.checked, status: "DONE" };
+      updateData = {
+        checked: body.checked,
+        status: "DONE",
+        streakDays: Number(task.streakDays) + 1,
+      };
       break;
 
     case "QTY":

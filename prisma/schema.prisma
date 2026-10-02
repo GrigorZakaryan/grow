@@ -84,6 +84,8 @@ model Task {
 
   activity      Activity[]
 
+  streakDays    Int?
+
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   lastResetAt DateTime?

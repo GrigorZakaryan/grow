@@ -141,6 +141,74 @@ export const TaskCard = ({
 
         {/* Chart */}
         <div className="w-full h-32 mt-6">
+          {task.countType === "QTY" && (
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart
+                data={lastSevenDays.map((day) => ({
+                  date: day.date,
+                  qty: day.qty,
+                }))}
+                margin={{
+                  top: 5,
+                  right: 0,
+                  left: 0,
+                  bottom: 0,
+                }}
+              >
+                <defs>
+                  <linearGradient
+                    id={`gradient-${task.id}`}
+                    x1="0"
+                    y1="0"
+                    x2="0"
+                    y2="1"
+                  >
+                    <stop offset="0%" stopColor="#ffffff" stopOpacity={0.4} />
+
+                    <stop offset="100%" stopColor="#000000" stopOpacity={0} />
+                  </linearGradient>
+                </defs>
+
+                <XAxis
+                  dataKey="date"
+                  tickFormatter={(date) => format(new Date(date), "E")}
+                  axisLine={false}
+                  tickLine={false}
+                  padding={{ left: 10, right: 10 }}
+                  tick={{
+                    fill: "rgba(255,255,255,0.4)",
+                    fontSize: 10,
+                  }}
+                />
+
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: "#1e1e1e",
+                    border: "1px solid rgba(255,255,255,0.1)",
+                    borderRadius: "12px",
+                    color: "white",
+                  }}
+                  labelFormatter={(date: any) =>
+                    format(new Date(date), "dd MMM")
+                  }
+                  formatter={(value) => [`${value}`, "Quantity"]}
+                />
+
+                <Area
+                  type="monotone"
+                  dataKey="qty"
+                  stroke="white"
+                  strokeWidth={2}
+                  fill={`url(#gradient-${task.id})`}
+                  dot={false}
+                  activeDot={{
+                    r: 4,
+                    strokeWidth: 0,
+                  }}
+                />
+              </AreaChart>
+            </ResponsiveContainer>
+          )}
           {task.countType === "TIME" && (
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart

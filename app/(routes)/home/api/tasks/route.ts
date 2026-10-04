@@ -100,13 +100,12 @@ export const GET = async (req: NextRequest) => {
         status: {
           in: ["UPCOMING", "IN_PROGRESS", "DONE"],
         },
-        frequency: {
-          in: ["DAILY"],
-        },
+        OR: [{ day: today }, { day: "" }],
       },
       orderBy: {
         startTime: "asc",
       },
+
       include: { domain: true },
     });
 

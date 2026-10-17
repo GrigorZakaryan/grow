@@ -23,6 +23,7 @@ import flame from "@/public/flame.png";
 import axios from "axios";
 import Image from "next/image";
 import { Separator } from "@/components/ui/separator";
+import Link from "next/link";
 
 export const TaskCard = ({
   task,
@@ -136,7 +137,9 @@ export const TaskCard = ({
             </div>
           </div>
 
-          <ChevronRight className="opacity-70" />
+          <Link href={`/task-individual/${task.id}`}>
+            <ChevronRight className="opacity-70" />
+          </Link>
         </div>
 
         {/* Chart */}

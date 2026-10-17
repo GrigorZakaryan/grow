@@ -33,6 +33,8 @@ export const GET = async (req: NextRequest) => {
 
     const startOfYesterday = new Date(startOfToday);
     startOfYesterday.setUTCDate(startOfYesterday.getUTCDate() - 1);
+    const startOfTomorrow = new Date(startOfToday);
+    startOfTomorrow.setUTCDate(startOfTomorrow.getUTCDate() + 1);
 
     const checkboxTasks = await db.task.findMany({
       where: {
@@ -43,7 +45,7 @@ export const GET = async (req: NextRequest) => {
           where: {
             date: {
               gte: startOfYesterday,
-              lt: startOfToday,
+              lt: startOfTomorrow,
             },
           },
         },
@@ -52,6 +54,8 @@ export const GET = async (req: NextRequest) => {
 
     await Promise.all(
       checkboxTasks.map(async (task) => {
+        // Keep a streak started today even when there was no activity yesterday.
+        // A streak is stale only when there was no activity yesterday or today.
         if (task.activity.length === 0) {
           await db.task.update({
             where: { id: task.id },

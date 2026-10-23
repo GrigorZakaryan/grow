@@ -1,5 +1,6 @@
 "use client";
 
+import { DomainStats } from "@/components/stats/domain-stats";
 import { Header } from "./components/header";
 import { HomeReflections } from "./components/home-reflections";
 import { QuickActions } from "./components/qucik-actions";
@@ -46,6 +47,7 @@ export default function Home() {
         <div className="flex items-center w-full mt-10">
           <QuickActions />
         </div>
+        <DomainStats />
         <HomeTasks />
         <HomeReflections />
       </div>

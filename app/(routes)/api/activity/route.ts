@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 export const POST = async (req: NextRequest) => {
   const body = await req.json();
 
-  const { taskId, date } = body;
+  const { taskId, date, projectId } = body;
   let { duration } = body;
 
   if (!taskId) {
@@ -50,7 +50,7 @@ export const POST = async (req: NextRequest) => {
 
   try {
     await db.activity.create({
-      data: { date, duration: duration * 60_000, taskId },
+      data: { date, duration: duration * 60_000, taskId, projectId },
     });
 
     try {

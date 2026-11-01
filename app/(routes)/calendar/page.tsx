@@ -7,7 +7,7 @@ export default async function CalendarPage() {
   const tasks = await db.task.findMany({ where: { day: { not: null } } });
   const activities = await db.activity.findMany({
     where: { taskId: { not: null } },
-    include: { task: true },
+    include: { task: true, project: true },
   });
   return (
     <div className="w-full h-full px-5 py-2">

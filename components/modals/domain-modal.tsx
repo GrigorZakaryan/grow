@@ -2,7 +2,7 @@
 import { IoLayers } from "react-icons/io5";
 import { Inter } from "next/font/google";
 import { Check, X } from "lucide-react";
-import { useDomainForm } from "../stores/use-domain-form";
+import { useDomainForm } from "../../app/(routes)/domains/stores/use-domain-form";
 import { AnimatePresence, motion } from "motion/react";
 import axios from "axios";
 import { useRouter } from "next/navigation";

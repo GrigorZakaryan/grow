@@ -1,11 +1,12 @@
 import { MenuBar } from "@/components/menubar";
-import { DomainForm } from "./domains/components/domain-form";
+import { DomainForm } from "../../components/modals/domain-modal";
 import { AnimatePresence } from "motion/react";
-import { Timer } from "@/components/modals/timer";
-import { ReflectionsForm } from "./individual/[domainId]/components/reflections/reflections-form";
-import { TasksForm } from "./individual/[domainId]/components/tasks/tasks-form";
+import { Timer } from "@/components/modals/timer-modal";
+import { ReflectionsForm } from "../../components/modals/reflections-modal";
+import { TasksForm } from "../../components/modals/tasks-modal";
 import db from "@/lib/db";
-import { ActivityForm } from "@/components/activity/activity-form";
+import { ActivityForm } from "@/components/modals/activity-modal";
+import { ProjectModal } from "@/components/modals/project-modal";
 
 export default async function RoutesLayout({
   children,
@@ -23,7 +24,8 @@ export default async function RoutesLayout({
         <Timer key={"timer"} />
         <ReflectionsForm key={"reflections-form"} />
         <TasksForm domains={domains} key={"tasks-form"} />
-        <ActivityForm tasks={tasks} />
+        <ActivityForm tasks={tasks} key={"activity-form"} />
+        <ProjectModal domains={domains} />
       </AnimatePresence>
     </div>
   );

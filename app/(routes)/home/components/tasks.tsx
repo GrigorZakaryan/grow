@@ -1,6 +1,7 @@
 "use client";
 import {
   Domain,
+  Project,
   TaskCountType,
   TaskFrequency,
   TaskStatus,
@@ -35,6 +36,8 @@ export type TaskProps = {
   showOnCalendar: boolean;
   streakDays: number | null;
   domain: Domain;
+  projectId: string;
+  project: Project;
 };
 
 export const HomeTasks = () => {

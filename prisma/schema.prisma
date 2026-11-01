@@ -12,21 +12,22 @@ model Domain {
   label       String
 
   relfections Relfection[]
+  projects    Project[]
   tasks       Task[]
 
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }
 
 model Relfection {
-  id       String @id @default(uuid())
-  content  Json
-  title    String
-  domainId String?
-  domain   Domain? @relation(fields: [domainId], references: [id])
+  id          String @id @default(uuid())
+  content     Json
+  title       String
+  domainId    String?
+  domain      Domain? @relation(fields: [domainId], references: [id])
 
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }
 
 enum TaskType {
@@ -53,6 +54,21 @@ enum TaskFrequency {
   MONTHLY
 }
 
+model Project {
+  id            String @id @default(uuid())
+  label         String
+  
+  domainId      String
+  domain        Domain @relation(fields: [domainId], references: [id])
+
+  tasks         Task[]
+  activity      Activity[]
+
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  lastResetAt   DateTime?
+}
+
 model Task {
   id            String @id @default(uuid())
   label         String
@@ -73,8 +89,8 @@ model Task {
 
   checked       Boolean?
   
-  domainId String
-  domain   Domain @relation(fields: [domainId], references: [id])
+  domainId      String
+  domain        Domain @relation(fields: [domainId], references: [id])
 
   showOnCalendar  Boolean @default(false)
 
@@ -86,9 +102,12 @@ model Task {
 
   streakDays    Int?
 
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  lastResetAt DateTime?
+  projectId     String?
+  project       Project? @relation(fields: [projectId], references: [id])
+
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  lastResetAt   DateTime?
 }
 
 model Activity {
@@ -100,5 +119,8 @@ model Activity {
   qty           Int?
 
   taskId        String?
-  task          Task?  @relation(fields: [taskId], references: [id])
+  task          Task?  @relation(fields: [taskId], references: [id]) 
+
+  projectId     String
+  project       Project @relation(fields: [projectId], references: [id])   
 }

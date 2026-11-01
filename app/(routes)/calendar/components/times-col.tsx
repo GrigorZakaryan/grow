@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { format } from "date-fns";
-import { Task } from "@/lib/generated/prisma/client";
+import { Project, Task } from "@/lib/generated/prisma/client";
 import { generateTime } from "../utils/generateDates";
 import { useSelectDay } from "../store/useSelectDay";
 import { useTaskForm } from "../../individual/[domainId]/stores/use-task-form";
@@ -16,6 +16,8 @@ interface ActivityProps {
   qty: number | null;
   taskId: string | null;
   task: Task | null;
+  projectId: string;
+  project: Project | null;
 }
 
 export const TimesCol = ({

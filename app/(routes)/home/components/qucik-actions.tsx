@@ -1,16 +1,25 @@
 "use client";
 import { useTimer } from "@/components/modals/stores/use-timer-store";
-import { FilePlus, LayersPlus, Logs, NotebookPen, Timer } from "lucide-react";
+import {
+  FilePlus,
+  FolderPlus,
+  LayersPlus,
+  Logs,
+  NotebookPen,
+  Timer,
+} from "lucide-react";
 import { useDomainForm } from "../../domains/stores/use-domain-form";
 import { useTaskForm } from "../../individual/[domainId]/stores/use-task-form";
 import { useActivity } from "../../individual/[domainId]/stores/use-activity-store";
 import { useEditorStore } from "../../individual/[domainId]/stores/use-editor";
 import axios from "axios";
+import { useProjectForm } from "../../individual/[domainId]/stores/use-project-form";
 
 export const QuickActions = () => {
   const { toggleOpen, open } = useTimer();
   const { setOpen } = useDomainForm();
   const { setOpenTask } = useTaskForm();
+  const { setOpenProject } = useProjectForm();
   const { setOpenActivity } = useActivity();
   const { setOpenEditor, setDocId } = useEditorStore();
 
@@ -26,38 +35,45 @@ export const QuickActions = () => {
 
   const activeList = [
     {
+      icon: <FolderPlus className="w-5 h-5 text-cyan-300" />,
+      label: "New Project",
+      key: "task",
+      index: 0,
+      action: () => setOpenProject(),
+    },
+    {
       icon: <FilePlus className="w-5 h-5 text-green-300" />,
       label: "Add Task",
       key: "task",
-      index: 0,
+      index: 1,
       action: () => setOpenTask(),
     },
     {
       icon: <Logs className="w-5 h-5 text-blue-300" />,
       label: "Log Activity",
       key: "activity",
-      index: 1,
+      index: 2,
       action: () => setOpenActivity(),
     },
     {
       icon: <NotebookPen className="w-5 h-5 text-violet-300" />,
       label: "New Journal",
       key: "journal",
-      index: 2,
+      index: 3,
       action: () => onJournalOpen(),
     },
     {
       icon: <Timer className="w-5 h-5 text-yellow-300" />,
       label: "Start Timer",
       key: "timer",
-      index: 3,
+      index: 4,
       action: () => toggleOpen(),
     },
     {
       icon: <LayersPlus className="w-5 h-5 text-red-300" />,
       label: "Add Domain",
       key: "domain",
-      index: 4,
+      index: 5,
       action: () => setOpen(),
     },
   ];

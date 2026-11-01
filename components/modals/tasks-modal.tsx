@@ -1,7 +1,7 @@
 "use client";
 import { AnimatePresence, motion } from "motion/react";
-import { useTaskForm } from "../../stores/use-task-form";
-import { inter } from "../reflections/reflections-form";
+import { useTaskForm } from "../../app/(routes)/individual/[domainId]/stores/use-task-form";
+import { inter } from "./reflections-modal";
 import { Check, Trash, X } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import axios from "axios";

@@ -83,6 +83,7 @@ export const PATCH = async (
       checked: body.checked,
       qty: body.qty,
       date: new Date(Date.now() - (body.time ?? 600000)),
+      projectId: body.projectId,
     },
   });
 

@@ -43,13 +43,13 @@ export default function Home() {
           Good {greeting}, <br />
           Grigor Zakaryan!
         </h1>
-
         <div className="flex items-center w-full mt-10">
           <QuickActions />
         </div>
+        {/*
         <DomainStats />
         <HomeTasks />
-        <HomeReflections />
+        <HomeReflections /> */}
       </div>
     </div>
   );

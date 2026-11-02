@@ -4,22 +4,19 @@ import { useProjectForm } from "@/app/(routes)/individual/[domainId]/stores/use-
 import { Domain } from "@/lib/generated/prisma/client";
 import axios from "axios";
 import { ChevronDown, Search, Check, X } from "lucide-react";
-import { AnimatePresence, motion, useDragControls } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
 
 type ProjectModalProps = {
   domains: Domain[];
-  onCreate?: (data: { label: string; domainId: string }) => void;
 };
 
-export const ProjectModal = ({ domains, onCreate }: ProjectModalProps) => {
+export const ProjectModal = ({ domains }: ProjectModalProps) => {
   const { openProject, setClose } = useProjectForm();
 
   const [content, setContent] = useState<"main" | "domain">("main");
   const [label, setLabel] = useState("");
   const [domain, setDomain] = useState<Domain | null>(null);
-
-  const dragControls = useDragControls();
 
   // Reset the form whenever the modal opens.
   useEffect(() => {

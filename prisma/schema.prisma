@@ -73,7 +73,7 @@ model Task {
   id            String @id @default(uuid())
   label         String
   description   String?
-  type          TaskType
+  type          TaskType @default(ONE_TIME)
   deadline      DateTime?
   frequency     TaskFrequency?
   status        TaskStatus

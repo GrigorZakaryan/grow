@@ -73,13 +73,12 @@ model Task {
   id            String @id @default(uuid())
   label         String
   description   String?
-  type          TaskType @default(ONE_TIME)
-  deadline      DateTime?
+  recurrence    TaskType @default(ONE_TIME)
   frequency     TaskFrequency?
   status        TaskStatus
   priority      Int   @default(0)
 
-  countType     TaskCountType @default(QTY)
+  countType     TaskCountType @default(CHECKBOX)
 
   qty           Int?
   finalQty      Int?

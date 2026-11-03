@@ -9,7 +9,7 @@ export const PATCH = async (
   const { domainId, taskId } = await params;
   const {
     label,
-    type,
+    recurrence,
     countType,
     description,
     finalQty,
@@ -23,12 +23,12 @@ export const PATCH = async (
 
   // 1. Validation logic
   if (!label) return new NextResponse("Missing Label!", { status: 400 });
-  if (type === "ONE_TIME" && !deadline)
+  if (recurrence === "ONE_TIME" && !deadline)
     return new NextResponse("Missing deadline!", { status: 400 });
 
   // 2. Data Preparation
-  if (type === "REPEATING") deadline = undefined;
-  if (type === "ONE_TIME") frequency = undefined;
+  if (recurrence === "REPEATING") deadline = undefined;
+  if (recurrence === "ONE_TIME") frequency = undefined;
 
   try {
     await db.task.update({
@@ -36,8 +36,7 @@ export const PATCH = async (
       data: {
         label,
         description,
-        type,
-        deadline,
+        recurrence,
         frequency,
         countType,
         status: "UPCOMING",

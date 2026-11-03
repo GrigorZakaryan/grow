@@ -35,9 +35,10 @@ type Content =
   | "time"
   | "quantity"
   | "priority"
-  | "project";
+  | "project"
+  | "calendar";
 
-type TaskType = "QTY" | "TIME" | "CHECK" | null;
+type TaskType = "QTY" | "TIME" | "CHECKBOX" | null;
 
 export const TaskModal = ({ domains }: TaskModalProps) => {
   const { openTask, setClose } = useTaskForm();
@@ -47,12 +48,19 @@ export const TaskModal = ({ domains }: TaskModalProps) => {
   const [domain, setDomain] = useState<DomainProps | null>(null);
   const [project, setProject] = useState<Project | null>(null);
 
-  const [type, setType] = useState<TaskType | null>("CHECK");
+  const [type, setType] = useState<TaskType | null>("CHECKBOX");
 
   const [time, setTime] = useState(0); // Total minutes
   const [quantity, setQuantity] = useState<number | null>(null);
 
   const [priority, setPriority] = useState(0);
+
+  const [date, setDate] = useState<string | undefined>(undefined);
+  const [startTime, setStartTime] = useState<string | undefined>(undefined);
+  const [endTime, setEndTime] = useState<string | undefined>(undefined);
+  const [reccurence, setReccurence] = useState<"ONE_TIME" | "REPEATING">(
+    "ONE_TIME",
+  );
 
   // Reset the form whenever the modal opens.
   useEffect(() => {
@@ -60,7 +68,7 @@ export const TaskModal = ({ domains }: TaskModalProps) => {
       setContent("main");
       setLabel("");
       setDomain(null);
-      setType("CHECK");
+      setType("CHECKBOX");
       setTime(0);
       setQuantity(null);
       setPriority(0);
@@ -72,7 +80,18 @@ export const TaskModal = ({ domains }: TaskModalProps) => {
     if (!label.trim() || !domain || !type || type === null) return;
 
     try {
-      await axios.post(`/individual/${domain.id}/api/projects`, { label });
+      await axios.post(`/individual/${domain.id}/api/tasks`, {
+        label,
+        reccurence,
+        countType: type,
+        priority,
+        day: date,
+        startTime,
+        endTime,
+        finalQty: quantity,
+        finalTimeMS: time,
+        projectId: project?.id,
+      });
     } catch (err) {
       console.error(err);
     }
@@ -227,6 +246,27 @@ export const TaskModal = ({ domains }: TaskModalProps) => {
                     />
                   </motion.div>
                 )}
+                {content === "calendar" && (
+                  <motion.div
+                    key="priority"
+                    initial={{ opacity: 0, x: 10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 10 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <CalendarContent
+                      setReccurence={setReccurence}
+                      reccurence={reccurence}
+                      startTime={startTime}
+                      endTime={endTime}
+                      setStartTime={setStartTime}
+                      setEndTime={setEndTime}
+                      setDate={setDate}
+                      date={date}
+                      setContent={setContent}
+                    />
+                  </motion.div>
+                )}
               </AnimatePresence>
 
               {/* Footer */}
@@ -247,7 +287,28 @@ export const TaskModal = ({ domains }: TaskModalProps) => {
                         className={`${project ? "text-rose-400" : "text-white/60"}`}
                       />
                     </div>
-                    <div>
+                    <div
+                      onClick={() => {
+                        const startDate = new Date();
+                        const endDate = new Date();
+                        endDate.setMinutes(endDate.getMinutes() + 30);
+
+                        const formattedStartTime = [
+                          String(startDate.getHours()).padStart(2, "0"),
+                          String(startDate.getMinutes()).padStart(2, "0"),
+                        ].join(":");
+
+                        const formattedEndTime = [
+                          String(endDate.getHours()).padStart(2, "0"),
+                          String(endDate.getMinutes()).padStart(2, "0"),
+                        ].join(":");
+
+                        setContent("calendar");
+                        setDate(new Date().toISOString().split("T")[0]);
+                        setStartTime(formattedStartTime);
+                        setEndTime(formattedEndTime);
+                      }}
+                    >
                       <Calendar className="text-white/60" />
                     </div>
                     <div
@@ -302,7 +363,6 @@ export const TaskModal = ({ domains }: TaskModalProps) => {
 };
 
 // MAIN CONTENT
-
 const MainContent = ({
   label,
   setLabel,
@@ -370,7 +430,7 @@ const MainContent = ({
                     </>
                   )}
 
-                  {type === "CHECK" && "Checkbox"}
+                  {type === "CHECKBOX" && "Checkbox"}
                 </h6>
               </div>
             )}
@@ -382,7 +442,6 @@ const MainContent = ({
 };
 
 // DOMAIN CONTENT
-
 const DomainContent = ({
   domains,
   selectedDomain,
@@ -467,7 +526,6 @@ const DomainContent = ({
 };
 
 // TYPE CONTENT
-
 const TypeContent = ({
   selectedType,
   setType,
@@ -480,7 +538,7 @@ const TypeContent = ({
   const types: { label: string; value: TaskType }[] = [
     { label: "Quantity", value: "QTY" },
     { label: "Time", value: "TIME" },
-    { label: "Checkbox", value: "CHECK" },
+    { label: "Checkbox", value: "CHECKBOX" },
   ];
   const [search, setSearch] = useState("");
 
@@ -561,7 +619,6 @@ const TypeContent = ({
 };
 
 // TIME CONTENT
-
 const TimeContent = ({
   time,
   setTime,
@@ -733,6 +790,7 @@ const ProjectContent = ({
   );
 };
 
+// PRIORITY CONTENT
 const PriorityContent = ({
   setContent,
   setPriority,
@@ -740,7 +798,7 @@ const PriorityContent = ({
 }: {
   priority: number;
   setPriority: (priority: number) => void;
-  setContent: (content: "main" | "domain") => void;
+  setContent: (content: Content) => void;
 }) => {
   const [search, setSearch] = useState("");
 
@@ -838,6 +896,77 @@ const PriorityContent = ({
             </p>
           )}
         </div>
+      </div>
+    </main>
+  );
+};
+
+// CALENDAR CONTENT
+const CalendarContent = ({
+  setContent,
+  setDate,
+  startTime,
+  endTime,
+  reccurence,
+  setStartTime,
+  setEndTime,
+  setReccurence,
+  date,
+}: {
+  setContent: (content: Content) => void;
+  setDate: (date: string) => void;
+  setStartTime: (time: string | undefined) => void;
+  setEndTime: (time: string | undefined) => void;
+  setReccurence: (reccurence: "ONE_TIME" | "REPEATING") => void;
+  reccurence: "ONE_TIME" | "REPEATING";
+  startTime: string | undefined;
+  endTime: string | undefined;
+  date: string | undefined;
+}) => {
+  return (
+    <main className="pb-10 pr-10 pl-7 w-full">
+      <div className="flex items-center gap-4 w-full">
+        <div className="w-full">
+          <label className="text-xs text-white/40 mb-2 block">Date</label>
+          <input
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            type="date"
+            className="h-14 bg-white/10 pl-3 w-full rounded-xl text-white text-xl outline-none"
+          />
+        </div>
+      </div>
+      <div className="flex items-center gap-7 w-full mt-5">
+        <div className="w-full">
+          <label className="text-xs text-white/40 mb-2 block">Start Time</label>
+          <input
+            value={startTime}
+            onChange={(e) => setStartTime(e.target.value)}
+            type="time"
+            className="h-14 bg-white/10 pl-3 w-full rounded-xl text-white text-xl outline-none"
+          />
+        </div>
+        <div className="w-full">
+          <label className="text-xs text-white/40 mb-2 block">End Time</label>
+          <input
+            value={endTime}
+            onChange={(e) => setEndTime(e.target.value)}
+            type="time"
+            className="h-14 bg-white/10 pl-3 w-full rounded-xl text-white text-xl outline-none"
+          />
+        </div>
+      </div>
+      <div className="mt-5">
+        <label className="text-xs text-white/40 mb-2 block">Recurrence</label>
+        <select
+          value={reccurence}
+          onChange={(e) =>
+            setReccurence(e.target.value as "ONE_TIME" | "REPEATING")
+          }
+          className="h-14 bg-white/10 px-3 w-full rounded-xl text-white outline-none"
+        >
+          <option value="ONE_TIME">One Time</option>
+        </select>
       </div>
     </main>
   );

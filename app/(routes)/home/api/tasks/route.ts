@@ -76,7 +76,7 @@ export const GET = async (req: NextRequest) => {
      */
     await db.task.updateMany({
       where: {
-        type: "REPEATING",
+        recurrence: "REPEATING",
 
         OR: [
           {

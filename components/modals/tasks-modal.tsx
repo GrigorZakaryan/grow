@@ -57,10 +57,8 @@ export const TasksForm = ({ domains }: { domains: Domain[] }) => {
       reset({
         label: task.label ?? "",
         domainId: task.domainId ?? domains[0]?.id ?? "",
-        type: task.type,
-        deadline: task.deadline
-          ? new Date(task.deadline).toISOString().slice(0, 16)
-          : "",
+        type: task.recurrence,
+
         frequency: task.frequency ?? "DAILY",
         countType: task.countType,
         priority: task.priority,

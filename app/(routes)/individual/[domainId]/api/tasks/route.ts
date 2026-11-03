@@ -9,7 +9,7 @@ export const POST = async (
   const { domainId } = await params;
   const {
     label,
-    type,
+    recurrence,
     countType,
     description,
     finalQty,
@@ -18,25 +18,25 @@ export const POST = async (
     day,
     startTime,
     endTime,
+    projectId,
   } = body;
   let { deadline, frequency } = body;
 
   // 1. Validation logic
   if (!label) return new NextResponse("Missing Label!", { status: 400 });
-  if (type === "ONE_TIME" && !deadline)
+  if (recurrence === "ONE_TIME" && !deadline)
     return new NextResponse("Missing deadline!", { status: 400 });
 
   // 2. Data Preparation
-  if (type === "REPEATING") deadline = undefined;
-  if (type === "ONE_TIME") frequency = undefined;
+  if (recurrence === "REPEATING") deadline = undefined;
+  if (recurrence === "ONE_TIME") frequency = undefined;
 
   try {
     await db.task.create({
       data: {
         label,
         description,
-        type,
-        deadline,
+        recurrence,
         frequency,
         countType,
         status: "UPCOMING",
@@ -51,6 +51,7 @@ export const POST = async (
         day,
         startTime,
         endTime,
+        projectId,
       },
     });
 
@@ -79,7 +80,7 @@ export const GET = async (
   await db.task.updateMany({
     where: {
       domainId: domainId,
-      type: "REPEATING", // Only target repeating tasks
+      recurrence: "REPEATING", // Only target repeating tasks
       updatedAt: { lt: clientDate }, // Tasks not updated today
     },
     data: {

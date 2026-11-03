@@ -15,7 +15,7 @@ export type TaskProps = {
   id: string;
   label: string;
   description: string | null;
-  type: TaskType;
+  recurrence: TaskType;
   deadline: Date | null;
   frequency: TaskFrequency | null;
   status: TaskStatus;

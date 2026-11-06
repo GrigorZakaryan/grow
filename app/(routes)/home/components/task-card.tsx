@@ -1,11 +1,13 @@
 "use client";
 
 import {
+  Calendar,
   Check,
   ChevronRight,
   CircleCheck,
   CirclePlus,
   Clock,
+  Flag,
   Flame,
   PlayCircle,
   StepForward,
@@ -449,6 +451,57 @@ export const TaskCard = ({
             {loading ? <Spinner /> : "Dismiss"}
           </Button>
         </div>
+      </div>
+    </div>
+  );
+};
+
+export const TaskCard2 = ({ task }: { task: TaskProps }) => {
+  return (
+    <div className="rounded-3xl bg-white/10 w-full">
+      <div className="p-5">
+        <header className="flex items-start w-full justify-between">
+          <div>
+            <p className="text-sm text-white/60 font-medium">
+              {task.domain.label} {task.project && "•"}{" "}
+              {task.project && task.project.label}
+            </p>
+            <h1 className="font-semibold text-xl mt-1">{task.label}</h1>
+          </div>
+          <div
+            className={`px-4 py-1 rounded-full font-medium text-xs ${
+              task.priority === 1
+                ? "text-blue-700 bg-blue-300"
+                : task.priority === 2
+                  ? "text-yellow-700 bg-yellow-300"
+                  : task.priority === 3
+                    ? "text-red-700 bg-red-300"
+                    : "bg-white/30 text-white/60"
+            }`}
+          >
+            {task.priority === 1
+              ? "Normal"
+              : task.priority === 2
+                ? "Urgent"
+                : task.priority === 3
+                  ? "Critical"
+                  : "None"}
+          </div>
+        </header>
+        <main className="mt-2 border-b pb-5">
+          <p className="text-xs text-white/70">{task.description}</p>
+        </main>
+        <footer className="pt-5">
+          <div>
+            <div className="flex items-center gap-2">
+              <Calendar className="w-3 h-3 text-white/80" />
+              <p className="text-sm text-white/80">
+                {task.day && format(new Date(task.day), "MMM dd")} |{" "}
+                {task.startTime}-{task.endTime}
+              </p>
+            </div>
+          </div>
+        </footer>
       </div>
     </div>
   );

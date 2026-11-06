@@ -9,14 +9,13 @@ import {
 } from "@/lib/generated/prisma/client";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { TaskCard } from "./task-card";
+import { TaskCard, TaskCard2 } from "./task-card";
 
 export type TaskProps = {
   id: string;
   label: string;
   description: string | null;
   recurrence: TaskType;
-  deadline: Date | null;
   frequency: TaskFrequency | null;
   status: TaskStatus;
   priority: number;
@@ -66,11 +65,8 @@ export const HomeTasks = () => {
 
   return (
     <div className="w-full mt-5">
-      <div className="flex items-center gap-3 mt-4 w-full overflow-y-hidden overflow-x-auto px-5">
-        {tasks &&
-          tasks.map((task) => (
-            <TaskCard onTaskUpdate={fetchTasks} task={task} key={task.id} />
-          ))}
+      <div className="flex flex-col items-center gap-3 mt-4 w-full overflow-y-auto overflow-x-hidden px-5">
+        {tasks && tasks.map((task) => <TaskCard2 task={task} key={task.id} />)}
         {loading && <div className="flex  rounded-2xl bg-muted min-h-50"></div>}
       </div>
     </div>

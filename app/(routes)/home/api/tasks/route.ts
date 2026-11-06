@@ -110,7 +110,7 @@ export const GET = async (req: NextRequest) => {
         startTime: "asc",
       },
 
-      include: { domain: true },
+      include: { domain: true, project: true },
     });
 
     return NextResponse.json(tasks);

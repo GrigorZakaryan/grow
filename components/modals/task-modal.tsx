@@ -13,7 +13,7 @@ import {
   Flag,
   Calendar,
 } from "lucide-react";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, motion, StepId } from "motion/react";
 import { useEffect, useState } from "react";
 
 type DomainProps = {
@@ -45,6 +45,7 @@ export const TaskModal = ({ domains }: TaskModalProps) => {
 
   const [content, setContent] = useState<Content>("main");
   const [label, setLabel] = useState("");
+  const [description, setDescription] = useState("");
   const [domain, setDomain] = useState<DomainProps | null>(null);
   const [project, setProject] = useState<Project | null>(null);
 
@@ -91,6 +92,7 @@ export const TaskModal = ({ domains }: TaskModalProps) => {
         finalQty: quantity,
         finalTimeMS: time,
         projectId: project?.id,
+        description,
       });
     } catch (err) {
       console.error(err);
@@ -146,6 +148,8 @@ export const TaskModal = ({ domains }: TaskModalProps) => {
                     transition={{ duration: 0.2 }}
                   >
                     <MainContent
+                      description={description}
+                      setDescription={setDescription}
                       type={type}
                       label={label}
                       setLabel={setLabel}
@@ -365,6 +369,8 @@ export const TaskModal = ({ domains }: TaskModalProps) => {
 // MAIN CONTENT
 const MainContent = ({
   label,
+  description,
+  setDescription,
   setLabel,
   domain,
   quantity,
@@ -374,6 +380,8 @@ const MainContent = ({
 }: {
   label: string;
   setLabel: (label: string) => void;
+  description: string;
+  setDescription: (desc: string) => void;
   domain: Domain | null;
   type: TaskType;
   time: number;
@@ -403,7 +411,15 @@ const MainContent = ({
         type="text"
         placeholder="Untitled Task"
       />
-      <div onClick={() => setContent("type")} className="flex flex-col mt-10">
+      <textarea
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+        name="description"
+        id="description"
+        placeholder="Click here to start typing description..."
+        className="h-14 mt-5 w-full focus::outine-none"
+      ></textarea>
+      <div onClick={() => setContent("type")} className="flex flex-col mt-5">
         <div className="flex items-center gap-5">
           <div className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center">
             <Filter className="w-5 h-5 text-white/50" />

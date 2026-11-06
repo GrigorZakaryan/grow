@@ -46,9 +46,9 @@ export default function Home() {
         <div className="flex items-center w-full mt-10">
           <QuickActions />
         </div>
-        <DomainStats />
+        {/*<DomainStats /> */}
         <HomeTasks />
-        <HomeReflections />
+        {/*<HomeReflections /> */}
       </div>
     </div>
   );
